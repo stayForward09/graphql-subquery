@@ -1,0 +1,91 @@
+type Block @entity {
+  id: ID!
+
+  number: BigInt @index
+  timestamp: Date @index
+  parentHash: String
+  specVersion: Int
+
+  extrinsics: [Extrinsic] @derivedFrom(field: "block")
+  events: [Event] @derivedFrom(field: "block")
+}
+
+type Extrinsic @entity {
+  id: ID!
+
+  method: String @index
+  section: String @index
+  args: String
+  signer: Account @index #create relation to account
+  nonce: BigInt
+  timestamp: Date @index
+  signature: String
+  tip: BigInt
+  isSigned: Boolean
+  isSuccess: Boolean
+
+  block: Block #create relation to block
+  events: [Event] @derivedFrom(field: "extrinsic")
+  calls: [Call] @derivedFrom(field: "extrinsic")
+}
+
+type Event @entity {
+  id: ID!
+
+  index: Int!
+  section: String! @index
+  method: String! @index
+  data: String!
+
+  block: Block #create relation to block
+  extrinsic: Extrinsic #create relation to extrins
+}
+
+type Call @entity {
+  id: ID!
+
+  section: String @index
+  method: String @index
+  args: String
+  timestamp: Date @index
+  isSuccess: Boolean
+
+  signer: Account #create ration to account
+  extrinsic: Extrinsic #create relation to extrinsic
+  parentCall: Call #create relation to call
+  calls: [Call] @derivedFrom(field: "parentCall")
+}
+
+type Account @entity {
+  id: ID!
+  timestamp: Date!
+
+  extrinsics: [Extrinsic] @derivedFrom(field: "signer")
+  calls: [Call] @derivedFrom(field: "signer")
+
+  transferIn: [Transfer] @derivedFrom(field: "to")
+  transferOut: [Transfer] @derivedFrom(field: "from")
+}
+
+type Transfer @entity {
+  id: ID!
+
+  from: Account @index
+  to: Account @index
+  amount: BigInt @index
+
+  extrinsic: Extrinsic #create relation to extrinsic
+  call: Call #create relation to call
+  timestamp: Date @index
+  isSuccess: Boolean
+}
+
+type SystemTokenTransfer @entity {
+  id: ID!
+
+  from: Account @index
+  to: Account @index
+  amount: BigInt @index
+  timestamp: Date @index
+  extrinsic: Extrinsic
+}

@@ -1,0 +1,28 @@
+specVersion: 0.2.0
+name: subql-nodle
+version: 0.0.4
+description: This project can be use as a starting po...
+repository: https://github.com/hobbydev71/subquery-nodle.git
+schema:
+  file: ./schema.graphql
+network:
+  endpoint: >-
+    wss://gateway.mainnet.octopus.network/debionetwork/ae48005a0c7ecb4053394559a7f4069e
+  genesisHash: "0x996800af345b3109acdada9913e36d1efa98b89e7dcd0b61b70fdbfc13b2fa50"
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 1
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleBlock
+          kind: substrate/BlockHandler
+        - handler: handleEvent
+          kind: substrate/EventHandler
+        - handler: handleCall
+          kind: substrate/CallHandler
+        - handler: systemTokenTransferEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Transfer
