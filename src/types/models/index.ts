@@ -16,3 +16,5 @@ export {Transfer} from "./Transfer"
 
 export {SystemTokenTransfer} from "./SystemTokenTransfer"
 
+export {VestingSchedule} from "./VestingSchedule"
+

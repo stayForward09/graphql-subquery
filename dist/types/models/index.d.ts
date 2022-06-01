@@ -5,3 +5,4 @@ export { Call } from "./Call";
 export { Account } from "./Account";
 export { Transfer } from "./Transfer";
 export { SystemTokenTransfer } from "./SystemTokenTransfer";
+export { VestingSchedule } from "./VestingSchedule";

@@ -1,12 +1,19 @@
 import { SubstrateBlock, SubstrateExtrinsic, SubstrateEvent } from '@subql/types'
-
+import { VESTING, ADD_VESTING_SCHEDULE } from '../handlers/types'
 import { BlockHandler } from '../handlers/block'
 import { EventHandler, ExtrinsicHandler } from '../handlers'
 import { CallHandler } from '../handlers/call'
+import { VestingScheduleHandler } from '../handlers/vestingschedule'
 
 export async function handleBlock(block: SubstrateBlock): Promise<void> {
     const handler = new BlockHandler(block)
 
+    await handler.save()
+}
+
+export async function handleVestingSchedule(event: SubstrateEvent): Promise<void> {
+    const handler = new VestingScheduleHandler(event)
+    
     await handler.save()
 }
 

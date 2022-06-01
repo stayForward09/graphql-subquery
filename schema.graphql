@@ -89,3 +89,10 @@ type SystemTokenTransfer @entity {
   timestamp: Date @index
   extrinsic: Extrinsic
 }
+
+type VestingSchedule @entity {
+  id: ID!
+  signer: String @index
+  to: String
+  data: String
+}
