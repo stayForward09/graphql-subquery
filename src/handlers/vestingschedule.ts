@@ -1,6 +1,5 @@
 import { SubstrateEvent } from '@subql/types'
 import { VestingSchedule } from '../types'
-import { ScheduleData } from '../types'
 import { VESTING, ADD_VESTING_SCHEDULE } from './types'
 
 export class VestingScheduleHandler {
@@ -47,9 +46,7 @@ export class VestingScheduleHandler {
   }
 
   public async save () {
-    if( this.section !== VESTING || this.method !== ADD_VESTING_SCHEDULE) return;
-    
-    const event = new VestingSchedule(this.id)
+    let event = new VestingSchedule(this.id)
 
     event.signer = this.signer
     event.to = this.toAddr

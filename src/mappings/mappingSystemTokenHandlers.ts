@@ -4,6 +4,7 @@ import type { Compact } from '@polkadot/types';
 import { SystemTokenTransfer } from "../types/models/SystemTokenTransfer";
 import { AccountHandler } from '../handlers/sub-handlers/account'
 import { ExtrinsicHandler } from '../handlers/extrinsic'
+import { VestingScheduleHandler } from "../handlers/vestingschedule";
 
 export async function systemTokenTransferEvent(event: SubstrateEvent): Promise<void> {
     const { event: { data: [from_origin, to_origin, amount_origin] } } = event;
