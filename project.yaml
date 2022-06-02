@@ -6,11 +6,11 @@ repository: https://github.com/hobbydev71/subquery-nodle.git
 schema:
   file: ./schema.graphql
 network:
-  endpoint: wss://node-6913072722034561024.lh.onfinality.io/ws?apikey=84d77e2e-3793-4785-8908-5096cffea77a
-  genesisHash: '0x0fd167da222f10dae826a0433fe4daadcf4a36c2a6bd5c1b085857d5b79030af'
+  endpoint: wss://nodle-parachain.api.onfinality.io/public-ws
+  genesisHash: '0x97da7ede98d7bad4e36b4d734b6055425a3be036da2a332ea5a7037656427a21'
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 1
+    startBlock: 343031
     mapping:
       file: ./dist/index.js
       handlers:

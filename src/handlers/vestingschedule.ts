@@ -1,5 +1,5 @@
 import { SubstrateEvent } from '@subql/types'
-import { VestingSchedule } from '../types'
+import { VestingData, VestingSchedule } from '../types'
 import { VESTING, ADD_VESTING_SCHEDULE } from './types'
 
 export class VestingScheduleHandler {
@@ -26,7 +26,7 @@ export class VestingScheduleHandler {
   }
 
   get vestingData () {
-      return  this.data[2].toString()
+      return  this.data[2].toJSON() as VestingData
   }
 
   get section () {
