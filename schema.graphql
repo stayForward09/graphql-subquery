@@ -89,3 +89,17 @@ type SystemTokenTransfer @entity {
   timestamp: Date @index
   extrinsic: Extrinsic
 }
+
+type VestingData @jsonField {
+  start: Int
+  period: Int
+  periodCount: Int
+  PerPeriod: BigInt
+}
+
+type VestingSchedule @entity {
+  id: ID!
+  signer: String @index
+  to: String
+  data: VestingData
+}
