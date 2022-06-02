@@ -1,53 +1,49 @@
 # subquery-nodle
 
 ## How to use query on Subquery server. 
+Subquery is a [gaphql](https://graphql.org) based API server. As it's the case with graphql you can either use HTTP to deliver your queries to the server using either of the two GET or POST methods explained [here](https://graphql.org/learn/serving-over-http/), or depending on the language of your client applications you use [a graphql library](https://graphql.org/code) and query the server in a way that's more idiomatic in your own coding language. The direct HTTP requests could be useful for the tests created in Postman or Insomnia, while the latter approach could be preferred inside your applications. Below you see the list of the queries that this project is supporting at the moment:
 
-Users can use query that can fetch the data which they want. Below content can helpfull to using query.
-### How to get transaction history
- User should be able to see transaction history list so that user can understand their transaction history by their account.
-```graphql
+### Query transaction history
+```
 query TransactionHistoryByAddress ($address: String!){
 	systemTokenTransfers (filter: {
       or: [
-        {
-          fromId: {
-            equalTo: $address
-          }
-        },        	
-        {
-          toId: {
-            equalTo: $address
-          }
-        }
+	{
+	  fromId: {
+	    equalTo: $address
+	  }
+	},        	
+	{
+	  toId: {
+	    equalTo: $address
+	  }
+	}
       ]
     }) {
       nodes {
-        id
-        fromId
-        toId
-        amount
-        extrinsicId
-        timestamp
+	id
+	fromId
+	toId
+	amount
+	extrinsicId
+	timestamp
       }
     }
 }
 ```
-### How to get vesting schedule by address
-
-Users should be able to see their vesting schedules by account address.
-
-```graphql VestingSchedulesByAddress
+### Query vesting schedules for an address
+```
 query VestingSchedulesByAddress($address: String!){
   vestingSchedules (filter: {
       signer: {
-        equalTo: $address
+	equalTo: $address
       }
     }) {
       nodes {
-        id
-        signer
-        to
-        data
+	id
+	signer
+	to
+	data
       }
     }
 }
