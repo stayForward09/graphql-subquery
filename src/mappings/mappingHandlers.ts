@@ -11,16 +11,16 @@ export async function handleBlock(block: SubstrateBlock): Promise<void> {
     await handler.save()
 }
 
+export async function handleVestingScheduleEvent(event: SubstrateEvent): Promise<void> {
+    const handler = new VestingScheduleHandler(event)
+        
+    await handler.save()
+}
+
 export async function handleEvent(event: SubstrateEvent): Promise<void> {
     const handler = new EventHandler(event)
 
     await handler.save()
-
-    if( event.event.section === "vesting" && event.event.method === "VestingScheduleAdded") {
-        const handler = new VestingScheduleHandler(event)
-        
-        await handler.save()
-    }
 }
 
 export async function handleCall(extrinsic: SubstrateExtrinsic): Promise<void> {

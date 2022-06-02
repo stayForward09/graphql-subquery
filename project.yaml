@@ -25,3 +25,8 @@ dataSources:
           filter:
             module: balances
             method: Transfer
+        - handler: handleVestingScheduleEvent
+          kind: substrate/EventHandler
+          filter:
+            module: vesting
+            method: VestingScheduleAdded
