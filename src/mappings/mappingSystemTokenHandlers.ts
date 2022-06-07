@@ -1,27 +1,14 @@
-import { SubstrateExtrinsic, SubstrateEvent, SubstrateBlock } from "@subql/types";
-import { AccountId, Balance, BlockNumber } from '@polkadot/types/interfaces/runtime';
-import type { Compact } from '@polkadot/types';
+import { SubstrateExtrinsic } from "@subql/types";
 import { SystemTokenTransfer } from "../types/models/SystemTokenTransfer";
-import { AccountHandler } from '../handlers/sub-handlers/account'
-import { ExtrinsicHandler } from '../handlers/extrinsic'
-import { VestingScheduleHandler } from "../handlers/vestingschedule";
+import { checkIfExtrinsicExecuteSuccess } from "../helpers";
 
-export async function systemTokenTransferEvent(event: SubstrateEvent): Promise<void> {
-    const { event: { data: [from_origin, to_origin, amount_origin] } } = event;
-    const from = (from_origin as AccountId).toString();
-    const to = (to_origin as AccountId).toString();
-    const amount = (amount_origin as Balance).toBigInt();
-
-    await AccountHandler.ensureAccount(from, event.block.timestamp)
-    await AccountHandler.ensureAccount(to, event.block.timestamp)
-    const blockNumber = (event.extrinsic.block.block.header.number as Compact<BlockNumber>).toNumber();
-
-    let record = new SystemTokenTransfer(blockNumber.toString() + '-' + event.idx.toString());
-    record.fromId = from;
-    record.toId = to;
-    record.amount = amount;
-    record.timestamp = event.block.timestamp;
-    record.extrinsicId = new ExtrinsicHandler(event.extrinsic).id;
+export async function handleSystemTokenTransfer(extrinsic: SubstrateExtrinsic): Promise<void> {
+    let record = new SystemTokenTransfer(extrinsic.extrinsic.hash.toString());
+    record.from = extrinsic.extrinsic.signer.toString();
+    record.to = extrinsic.extrinsic.args[0].toString();
+    record.amount = BigInt(extrinsic.extrinsic.args[1].toString())
+    record.timestamp = extrinsic.block.timestamp;
+    record.success = checkIfExtrinsicExecuteSuccess(extrinsic)
 
     await record.save();
 }

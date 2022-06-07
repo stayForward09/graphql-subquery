@@ -20,13 +20,13 @@ dataSources:
           kind: substrate/EventHandler
         - handler: handleCall
           kind: substrate/CallHandler
-        - handler: systemTokenTransferEvent
-          kind: substrate/EventHandler
+        - handler: handleSystemTokenTransfer
+          kind: substrate/CallHandler
           filter:
             module: balances
-            method: Transfer
-        - handler: vestingScheduleEvent
-          kind: substrate/EventHandler
+            method: transfer
+        - handler: handleVestingSchedule
+          kind: substrate/CallHandler
           filter:
             module: vesting
-            method: VestingScheduleAdded
+            method: addVestingSchedule

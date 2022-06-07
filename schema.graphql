@@ -83,11 +83,11 @@ type Transfer @entity {
 type SystemTokenTransfer @entity {
   id: ID!
 
-  from: Account @index
-  to: Account @index
+  from: String @index
+  to: String @index
   amount: BigInt @index
   timestamp: Date @index
-  extrinsic: Extrinsic
+  success: Boolean
 }
 
 type VestingData @jsonField {
@@ -100,6 +100,7 @@ type VestingData @jsonField {
 type VestingSchedule @entity {
   id: ID!
   signer: String @index
-  to: String
+  to: String @index
   data: VestingData
+  success: Boolean
 }
