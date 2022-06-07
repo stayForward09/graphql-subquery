@@ -1,8 +1,8 @@
 import { SubstrateExtrinsic } from '@subql/types'
 import { checkIfExtrinsicExecuteSuccess } from '../helpers'
-import { VestingData, VestingSchedule } from '../types'
+import { SystemTokenTransfer } from '../types'
 
-export class VestingScheduleHandler {
+export class SystemTokenTransferHandler {
   private extrinsic: SubstrateExtrinsic 
 
   constructor(extrinsic: SubstrateExtrinsic) {
@@ -21,14 +21,19 @@ export class VestingScheduleHandler {
     return this.extrinsic.extrinsic.signer.toString()
   }
 
-  public async save () {
-    let vesting = new VestingSchedule(this.hash)
+  get timestamp () {
+      return this.extrinsic.block.timestamp
+  }
 
-    vesting.signer = this.signer
-    vesting.to = this.args[0].toString()
-    vesting.data = this.args[1] as VestingData
-    vesting.success = checkIfExtrinsicExecuteSuccess(this.extrinsic)
+  public async save () {
+    let transfer = new SystemTokenTransfer(this.hash)
+
+    transfer.from = this.signer
+    transfer.to = this.args[0].toString()
+    transfer.amount = BigInt(this.args[1].toString())
+    transfer.timestamp = this.timestamp
+    transfer.success = checkIfExtrinsicExecuteSuccess(this.extrinsic)
     
-    await vesting.save()
+    await transfer.save()
   }
 }

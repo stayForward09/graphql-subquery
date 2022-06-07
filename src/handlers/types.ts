@@ -15,7 +15,3 @@ export interface DispatchedCallData {
 export type CallDispatcher = Dispatcher<DispatchedCallData>
 
 export type callHandler = (data: DispatchedCallData) => Promise<any>
-
-export const VESTING = "vesting"
-
-export const ADD_VESTING_SCHEDULE = "VestingScheduleAdded"
