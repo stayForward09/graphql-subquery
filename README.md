@@ -48,3 +48,67 @@ query VestingSchedulesByAddress($address: String!){
     }
 }
 ```
+
+### How to get transfer lists by specific address & timestamp
+
+```graphql
+query transfersByFields($from: String! $to: String!) {
+    systemTokenTransfers(filter: {
+      and: [
+        {
+          fromId: {
+            equalTo: $from
+          }
+        }
+        {
+          toId: {
+            equalTo: $to
+          }
+        }
+      ]
+    }) {
+    	nodes {
+        id
+        fromId
+        toId
+        timestamp
+      }
+  }
+}
+```
+
+```graphql
+query transfersByFields($from: String! $to: String! $start: Date! $end: Date!) {
+    systemTokenTransfers(filter: {
+      and: [
+        {
+          fromId: {
+            equalTo: $from
+          }
+        }
+        {
+          toId: {
+            equalTo: $to
+          }
+        }
+        {
+          timestamp: {
+            greaterThanOrEqualTo: $start
+          }
+        }
+        {
+          timestamp: {
+            lessThanOrEqualTo: $end
+          }
+        }
+      ]
+    }) {
+    	nodes {
+        id
+        fromId
+        toId
+        timestamp
+      }
+  }
+}
+```
