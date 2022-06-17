@@ -10,9 +10,53 @@ network:
   genesisHash: '0x97da7ede98d7bad4e36b4d734b6055425a3be036da2a332ea5a7037656427a21'
   chaintypes:
     file: ./dist/chaintypes.js
+  typesBundle: {
+    spec: {
+      chainname: {
+        rpc: {
+          rootOfTrust: {
+            isChildCertificateValid: {
+              description: "Check if the child certificate is valid for the given root",
+              params: [
+                {
+                  name: "root",
+                  type: "CertificateId",
+                },
+                {
+                  name: "child",
+                  type: "CertificateId",
+                },
+                {
+                  name: "at",
+                  type: "Hash",
+                  isOptional: true,
+                },
+              ],
+              type: "bool",
+            },
+            isRootCertificateValid: {
+              description: "Check if the given certificate is a valid root",
+              params: [
+                {
+                  name: "cert",
+                  type: "CertificateId",
+                },
+                {
+                  name: "at",
+                  type: "Hash",
+                  isOptional: true,
+                },
+              ],
+              type: "bool",
+            }
+          }
+        }
+      }
+    }
+  }
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 1
+    startBlock: 136579
     mapping:
       file: ./dist/index.js
       handlers:
