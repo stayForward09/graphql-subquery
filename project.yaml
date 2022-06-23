@@ -19,8 +19,8 @@ network:
     file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 1
-    mapping:
+    startBlock: 304775
+    mapping: 
       file: ./dist/index.js
       handlers:
         - handler: systemTokenTransferEvent
