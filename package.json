@@ -4,7 +4,7 @@
   "description": "This project can be use as a starting po...",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -b",
+    "build": "subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
     "start:docker": "docker-compose pull && docker-compose up",
@@ -23,6 +23,9 @@
     "@polkadot/api": "^6",
     "@subql/types": "latest",
     "typescript": "^4.1.3",
-    "@subql/cli": "latest"
+    "@subql/cli": "1.1.0"
+  },
+  "exports": {
+    "chaintypes": "src/chaintypes.ts"
   }
 }
