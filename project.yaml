@@ -19,10 +19,16 @@ network:
     file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 304775
+    startBlock: 1
     mapping: 
       file: ./dist/index.js
       handlers:
+        - handler: handleBlock
+          kind: substrate/BlockHandler
+        - handler: handleCall
+          kind: substrate/CallHandler
+        - handler: handleEvent
+          kind: substrate/EventHandler
         - handler: systemTokenTransferEvent
           kind: substrate/EventHandler
           filter:
