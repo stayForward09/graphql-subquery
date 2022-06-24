@@ -1,34 +1,29 @@
 specVersion: 1.0.0
 name: subql-nodle
-version: 0.0.4
+version: 1.0.0
 runner:
   node:
     name: '@subql/node'
-    version: 1.2.1
+    version: '*'
   query:
     name: '@subql/query'
-    version: latest
-description: This project can be use as a starting po...
-repository: https://github.com/NodleCode/subquery.git
+    version: '*'
+repository: 'https://github.com/NodleCode/subquery.git'
 schema:
   file: ./schema.graphql
 network:
   chainId: '0x97da7ede98d7bad4e36b4d734b6055425a3be036da2a332ea5a7037656427a21'
-  endpoint: wss://nodle-parachain.api.onfinality.io/public-ws
+  endpoint: 'wss://nodle-parachain.api.onfinality.io/public-ws'
   chaintypes:
     file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 343301
-    mapping: 
+    startBlock: 343031
+    mapping:
       file: ./dist/index.js
       handlers:
         - handler: handleBlock
           kind: substrate/BlockHandler
-        - handler: handleCall
-          kind: substrate/CallHandler
-        - handler: handleEvent
-          kind: substrate/EventHandler
         - handler: systemTokenTransferEvent
           kind: substrate/EventHandler
           filter:
