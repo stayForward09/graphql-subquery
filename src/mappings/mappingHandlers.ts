@@ -56,7 +56,7 @@ function handleCall(idx: string, extrinsic: SubstrateExtrinsic): Extrinsic {
   return newExtrinsic;
 }
 
-function wrapExtrinsics(wrappedBlock: SubstrateBlock): SubstrateExtrinsic[] {
+function extractExtrinsics(block: SubstrateBlock): SubstrateExtrinsic[] {
   return wrappedBlock.block.extrinsics.map((extrinsic, idx) => {
     const events = wrappedBlock.events.filter(
       ({ phase }) => phase.isApplyExtrinsic && phase.asApplyExtrinsic.eqn(idx)
