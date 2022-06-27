@@ -39,7 +39,7 @@ function handleEvent(
   event: EventRecord
 ): Event {
   const newEvent = new Event(`${blockNumber}-${eventIdx}`);
-  newEvent.blockHeight = BigInt(blockNumber);
+  newEvent.blockHeight = Number(blockNumber);
   newEvent.module = event.event.section;
   newEvent.event = event.event.method;
   return newEvent;
