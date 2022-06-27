@@ -7,7 +7,7 @@ type Event @entity {
   id: ID!
   module: String! @index
   event: String! @index
-  blockHeight: BigInt! @index
+  blockHeight: Int! @index
 }
 
 type Extrinsic @entity {
