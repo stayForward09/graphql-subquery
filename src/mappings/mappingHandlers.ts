@@ -5,10 +5,8 @@ import { SpecVersion, Event, Extrinsic } from "../types";
 export async function handleBlock(block: SubstrateBlock): Promise<void> {
   let specVersion = await SpecVersion.get(block.specVersion.toString());
 
-  // Check for updates to Spec Version
-  if (!specVersion || specVersion.id !== block.specVersion.toString()) {
-    specVersion = new SpecVersion(block.specVersion.toString());
-    specVersion.blockHeight = block.block.header.number.toBigInt();
+  if (!specVersion.blockHeight) {
+    specVersion.blockHeight = block.block.header.number.toNumber();
     await specVersion.save();
   }
 
