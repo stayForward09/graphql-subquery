@@ -3,10 +3,7 @@ import { SubstrateExtrinsic, SubstrateBlock } from "@subql/types";
 import { SpecVersion, Event, Extrinsic } from "../types";
 
 export async function handleBlock(block: SubstrateBlock): Promise<void> {
-  // Initialise Spec Version
-  if (!specVersion) {
-    specVersion = await SpecVersion.get(block.specVersion.toString());
-  }
+  let specVersion = await SpecVersion.get(block.specVersion.toString());
 
   // Check for updates to Spec Version
   if (!specVersion || specVersion.id !== block.specVersion.toString()) {
