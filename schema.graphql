@@ -24,7 +24,6 @@ type SystemTokenTransfer @entity {
   id: ID!
   from: String @index
   to: String @index
-  txHash: String @index
   amount: BigInt @index
   timestamp: Date @index
   success: Boolean
