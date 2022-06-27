@@ -21,9 +21,9 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@polkadot/api": "^8",
-    "@subql/types": "latest",
-    "typescript": "^4.1.3",
-    "@subql/cli": "latest"
+    "@subql/types": "^1.1.0",
+    "@subql/cli": "^1.1.0",
+    "typescript": "^4.1.3"
   },
   "exports": {
     "chaintypes": "src/chaintypes.ts"
