@@ -1,6 +1,6 @@
 type SpecVersion @entity {
   id: ID! #specVersion
-  blockHeight: BigInt!
+  blockHeight: Int!
 }
 
 type Event @entity {
