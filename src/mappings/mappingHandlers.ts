@@ -2,10 +2,16 @@ import { EventRecord } from "@polkadot/types/interfaces";
 import { SubstrateExtrinsic, SubstrateBlock } from "@subql/types";
 import { SpecVersion, Event, Extrinsic } from "../types";
 
-export async function handleBlock(block: SubstrateBlock): Promise<void> {
-  let specVersion = await SpecVersion.get(block.specVersion.toString());
+let specVersion: SpecVersion;
 
-  if (!specVersion.blockHeight) {
+export async function handleBlock(block: SubstrateBlock): Promise<void> {
+  if (!specVersion) {
+    specVersion = await SpecVersion.get(block.specVersion.toString());
+  }
+
+  // Check for updates to Spec Version
+  if (!specVersion || specVersion.id !== block.specVersion.toString()) {
+    specVersion = new SpecVersion(block.specVersion.toString());
     specVersion.blockHeight = block.block.header.number.toNumber();
     await specVersion.save();
   }
@@ -22,7 +28,7 @@ export async function handleBlock(block: SubstrateBlock): Promise<void> {
     );
 
   // Process all calls in block
-  const calls = wrapExtrinsics(block).map((ext, idx) =>
+  const calls = extractExtrinsics(block).map((ext, idx) =>
     handleCall(`${block.block.header.number.toString()}-${idx}`, ext)
   );
 
@@ -39,7 +45,7 @@ function handleEvent(
   event: EventRecord
 ): Event {
   const newEvent = new Event(`${blockNumber}-${eventIdx}`);
-  newEvent.blockHeight = Number(blockNumber);
+  newEvent.blockHeight = parseInt(blockNumber);
   newEvent.module = event.event.section;
   newEvent.event = event.event.method;
   return newEvent;
@@ -50,21 +56,21 @@ function handleCall(idx: string, extrinsic: SubstrateExtrinsic): Extrinsic {
   newExtrinsic.txHash = extrinsic.extrinsic.hash.toString();
   newExtrinsic.module = extrinsic.extrinsic.method.section;
   newExtrinsic.call = extrinsic.extrinsic.method.method;
-  newExtrinsic.blockHeight = extrinsic.block.block.header.number.toBigInt();
+  newExtrinsic.blockHeight = extrinsic.block.block.header.number.toNumber();
   newExtrinsic.success = extrinsic.success;
   newExtrinsic.isSigned = extrinsic.extrinsic.isSigned;
   return newExtrinsic;
 }
 
 function extractExtrinsics(block: SubstrateBlock): SubstrateExtrinsic[] {
-  return wrappedBlock.block.extrinsics.map((extrinsic, idx) => {
-    const events = wrappedBlock.events.filter(
+  return block.block.extrinsics.map((extrinsic, idx) => {
+    const events = block.events.filter(
       ({ phase }) => phase.isApplyExtrinsic && phase.asApplyExtrinsic.eqn(idx)
     );
     return {
       idx,
       extrinsic,
-      block: wrappedBlock,
+      block,
       events,
       success:
         events.findIndex((evt) => evt.event.method === "ExtrinsicSuccess") > -1,

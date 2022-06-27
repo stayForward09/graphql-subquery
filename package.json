@@ -1,7 +1,6 @@
 {
-  "name": "subql-dictionary",
+  "name": "subquery",
   "version": "1.0.0",
-  "description": "A SubQuery Dictionary Project that provides increased indexing speed to all projects",
   "main": "dist/index.js",
   "scripts": {
     "build": "yarn codegen && subql build",
@@ -9,8 +8,8 @@
     "codegen": "./node_modules/.bin/subql codegen",
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans"
   },
-  "homepage": "https://github.com/subquery/subql-dictionary",
-  "repository": "github:subquery/subql-dictionary",
+  "homepage": "https://github.com/NodleCode/subquery",
+  "repository": "github:NodleCode/subquery",
   "files": [
     "dist",
     "schema.graphql",
