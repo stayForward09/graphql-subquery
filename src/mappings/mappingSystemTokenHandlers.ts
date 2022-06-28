@@ -9,14 +9,14 @@ export async function systemTokenTransferEvent(event: SubstrateEvent): Promise<v
     const from = (from_origin as AccountId).toString();
     const to = (to_origin as AccountId).toString();
     const amount = (amount_origin as Balance).toBigInt();
-    // const txHash = event.extrinsic.extrinsic.hash.toString();
+    const txHash = event.extrinsic.extrinsic.hash.toString();
 
     const blockNumber = (event.extrinsic.block.block.header.number as Compact<BlockNumber>).toNumber();
 
     let record = new SystemTokenTransfer(blockNumber.toString() + '-' + event.idx.toString());
     record.from = from;
     record.to = to;
-    // record.txHash = txHash;
+    record.txHash = txHash;
     record.amount = amount;
     record.timestamp = event.block.timestamp;
     record.success = checkIfExtrinsicExecuteSuccess(event.extrinsic)

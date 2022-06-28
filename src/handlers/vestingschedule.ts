@@ -21,9 +21,18 @@ export class VestingScheduleHandler {
     return this.extrinsic.extrinsic.signer.toString()
   }
 
-  public async save () {
-    let vesting = new VestingSchedule(this.hash)
+  get block () {
+    return this.extrinsic.block.block.header.number.toString()
+  }
 
+  get idx () {
+    return this.extrinsic.idx
+  }
+
+  public async save () {
+    let vesting = new VestingSchedule(this.block + "-" + this.idx)
+    vesting.block = Number(this.block)
+    vesting.txHash = this.hash
     vesting.signer = this.signer
     vesting.to = this.args[0].toString()
     vesting.data = this.args[1] as VestingData

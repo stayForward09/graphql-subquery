@@ -22,9 +22,9 @@ type Extrinsic @entity {
 
 type SystemTokenTransfer @entity {
   id: ID!
-
   from: String @index
   to: String @index
+  txHash: String @index
   amount: BigInt @index
   timestamp: Date @index
   success: Boolean
@@ -39,6 +39,8 @@ type VestingData @jsonField {
 
 type VestingSchedule @entity {
   id: ID!
+  block: Int @index
+  txHash: String @index
   signer: String @index
   to: String @index
   data: VestingData
