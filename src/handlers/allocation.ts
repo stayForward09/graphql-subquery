@@ -1,5 +1,5 @@
 import { SubstrateEvent } from '@subql/types'
-import { Allocations } from '../types'
+import { Allocations } from '../types/models/Allocations'
 
 export class AllocationHandler {
   private event: SubstrateEvent 
@@ -23,10 +23,13 @@ export class AllocationHandler {
   public async save () {    
     const allocation = new Allocations(`${this.blockNumber}-${this.idx}`)
     // logger.info(`data: ${this.data}`)
-    allocation.account = this.data[0].toString()
-    allocation.value = BigInt(this.data[1].toString())
-    allocation.fee = BigInt(this.data[2].toString())
-    allocation.proof = this.data[3].toString()
+
+    const [who, value, fee, proof] = this.data
+
+    allocation.account = who.toString()
+    allocation.value = value.toString()
+    allocation.fee = fee.toString()
+    allocation.proof = proof.toString()
 
     await allocation.save()
   }
