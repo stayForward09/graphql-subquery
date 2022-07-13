@@ -1,8 +1,8 @@
-import { SubstrateExtrinsic } from '@subql/types'
+import { SubstrateEvent } from '@subql/types'
 import { VestingScheduleHandler } from '../handlers/vestingschedule'
 
-export async function handleVestingSchedule(extrinsic: SubstrateExtrinsic): Promise<void> {
-    const handler = new VestingScheduleHandler(extrinsic)
+export async function handleVestingSchedule(event: SubstrateEvent): Promise<void> {
+    const handler = new VestingScheduleHandler(event)
         
     await handler.save()
 }

@@ -1,42 +1,39 @@
-import { SubstrateExtrinsic } from '@subql/types'
+import { SubstrateEvent } from '@subql/types'
 import { checkIfExtrinsicExecuteSuccess } from '../helpers'
 import { VestingData, VestingSchedule } from '../types'
 
 export class VestingScheduleHandler {
-  private extrinsic: SubstrateExtrinsic 
+  private event: SubstrateEvent 
 
-  constructor(extrinsic: SubstrateExtrinsic) {
-    this.extrinsic = extrinsic
+  constructor(event: SubstrateEvent) {
+    this.event = event
   }
 
-  get args () {
-    return this.extrinsic.extrinsic.args
+  get data () {
+    return this.event.event.data
   }
 
   get hash () {
-    return this.extrinsic.extrinsic.hash.toString()
-  }
-
-  get signer () {
-    return this.extrinsic.extrinsic.signer.toString()
+    return this.event.extrinsic.extrinsic.hash.toString()
   }
 
   get block () {
-    return this.extrinsic.block.block.header.number.toString()
+    return this.event.block.block.header.number.toNumber()
   }
 
   get idx () {
-    return this.extrinsic.idx
+    return this.event.idx
   }
 
   public async save () {
     let vesting = new VestingSchedule(this.block + "-" + this.idx)
-    vesting.block = Number(this.block)
+    const [from, to, vesting_schedule] = this.data
+    vesting.block = this.block
     vesting.txHash = this.hash
-    vesting.signer = this.signer
-    vesting.to = this.args[0].toString()
-    vesting.data = this.args[1] as VestingData
-    vesting.success = checkIfExtrinsicExecuteSuccess(this.extrinsic)
+    vesting.signer = from.toString()
+    vesting.to = to.toString()
+    vesting.data = vesting_schedule as VestingData
+    vesting.success = checkIfExtrinsicExecuteSuccess(this.event.extrinsic)
     
     await vesting.save()
   }

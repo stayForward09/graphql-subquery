@@ -30,7 +30,7 @@ dataSources:
             module: balances
             method: Transfer
         - handler: handleVestingSchedule
-          kind: substrate/CallHandler
+          kind: substrate/EventHandler
           filter:
             module: vesting
-            method: addVestingSchedule
+            event: VestingScheduleAdded
