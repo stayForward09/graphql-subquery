@@ -12,13 +12,14 @@ repository: 'https://github.com/NodleCode/subquery.git'
 schema:
   file: ./schema.graphql
 network:
-  chainId: '0x0fd167da222f10dae826a0433fe4daadcf4a36c2a6bd5c1b085857d5b79030af'
-  endpoint: 'wss://nodle-paradis.api.onfinality.io/public-ws'
+  chainId: '0x97da7ede98d7bad4e36b4d734b6055425a3be036da2a332ea5a7037656427a21'
+  endpoint: 'wss://nodle-parachain.api.onfinality.io/public-ws'
+  dictionary: 'https://explorer.subquery.network/subquery/subquery/nodle-parachain-dictionary'
   chaintypes:
     file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 1
+    startBlock: 537368
     mapping:
       file: ./dist/index.js
       handlers:
@@ -34,3 +35,8 @@ dataSources:
           filter:
             module: vesting
             method: addVestingSchedule
+        - handler: handleAllocation
+          kind: substrate/EventHandler
+          filter:
+            module: allocations
+            event: newallocation
