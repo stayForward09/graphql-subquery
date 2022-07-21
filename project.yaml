@@ -1,13 +1,22 @@
-specVersion: 0.2.0
+specVersion: 1.0.0
 name: subql-nodle
-version: 0.0.4
-description: This project can be use as a starting po...
-repository: https://github.com/hobbydev71/subquery-nodle.git
+version: 1.0.0
+runner:
+  node:
+    name: '@subql/node'
+    version: '*'
+  query:
+    name: '@subql/query'
+    version: '*'
+repository: 'https://github.com/NodleCode/subquery.git'
 schema:
   file: ./schema.graphql
 network:
-  endpoint: https://node-6913072722034561024.lh.onfinality.io/rpc?apikey=84d77e2e-3793-4785-8908-5096cffea77a
-  genesisHash: '0x0fd167da222f10dae826a0433fe4daadcf4a36c2a6bd5c1b085857d5b79030af'
+  chainId: '0x97da7ede98d7bad4e36b4d734b6055425a3be036da2a332ea5a7037656427a21'
+  endpoint: 'wss://nodle-parachain.api.onfinality.io/public-ws'
+  dictionary: 'https://explorer.subquery.network/subquery/subquery/nodle-parachain-dictionary'
+  chaintypes:
+    file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/Runtime
     startBlock: 1
@@ -16,17 +25,18 @@ dataSources:
       handlers:
         - handler: handleBlock
           kind: substrate/BlockHandler
-        - handler: handleEvent
-          kind: substrate/EventHandler
-        - handler: handleCall
-          kind: substrate/CallHandler
         - handler: systemTokenTransferEvent
           kind: substrate/EventHandler
           filter:
             module: balances
             method: Transfer
-        - handler: vestingScheduleEvent
-          kind: substrate/EventHandler
+        - handler: handleVestingSchedule
+          kind: substrate/CallHandler
           filter:
             module: vesting
-            method: VestingScheduleAdded
+            method: addVestingSchedule
+        - handler: handleAllocation
+          kind: substrate/EventHandler
+          filter:
+            module: allocations
+            event: newallocation

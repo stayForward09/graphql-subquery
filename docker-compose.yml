@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   postgres:
@@ -22,10 +22,9 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     volumes:
-      - ./:/subql-debionetwork
+      - ./:/app
     command:
-      - -f=/subql-debionetwork
-      - --db-schema=subql-nodle
+      - -f=/app
 
   graphql-engine:
     image: onfinality/subql-query:latest
@@ -33,7 +32,6 @@ services:
       - 3000:3000
     depends_on:
       - "postgres"
-      - "subquery-node"
     restart: always
     environment:
       DB_USER: postgres
@@ -42,6 +40,5 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     command:
-      - --name=subql-nodle
+      - --name=app
       - --playground
-      - --indexer=http://subquery-node:3000
