@@ -37,7 +37,7 @@ type VestingData @jsonField {
   PerPeriod: BigInt
 }
 
-type VestingSchedule @entity {
+type VestingScheduleAdded @entity {
   id: ID!
   block: Int @index
   txHash: String @index
