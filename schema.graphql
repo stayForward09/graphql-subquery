@@ -46,3 +46,11 @@ type VestingScheduleAdded @entity {
   data: VestingData
   success: Boolean
 }
+
+type Allocations @entity {
+  id: ID!
+  account: String @index
+  value: String
+  fee: String
+  proof: String
+}
