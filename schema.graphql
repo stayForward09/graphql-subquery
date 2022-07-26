@@ -47,6 +47,15 @@ type VestingScheduleAdded @entity {
   success: Boolean
 }
 
+type VestingScheduleFailed @entity {
+  id: ID!
+  block: Int @index
+  txHash: String @index
+  signer: String @index
+  to: String @index
+  data: VestingData
+}
+
 type Allocations @entity {
   id: ID!
   account: String @index
