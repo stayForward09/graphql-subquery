@@ -35,6 +35,11 @@ dataSources:
           filter:
             module: vesting
             event: VestingScheduleAdded
+        - handler: handleVestingScheduleFailed
+          kind: substrate/CallHandler
+          filter:
+            module: vesting
+            method: addVestingSchedule
         - handler: handleAllocation
           kind: substrate/EventHandler
           filter:

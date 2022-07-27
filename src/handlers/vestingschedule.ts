@@ -1,6 +1,6 @@
 import { SubstrateEvent } from '@subql/types'
 import { checkIfExtrinsicExecuteSuccess } from '../helpers'
-import { VestingData, VestingSchedule } from '../types'
+import { VestingData, VestingScheduleAdded } from '../types'
 
 export class VestingScheduleHandler {
   private event: SubstrateEvent 
@@ -26,7 +26,7 @@ export class VestingScheduleHandler {
   }
 
   public async save () {
-    let vesting = new VestingSchedule(this.block + "-" + this.idx)
+    let vesting = new VestingScheduleAdded(this.block + "-" + this.idx)
     const [from, to, vesting_schedule] = this.data
     vesting.block = this.block
     vesting.txHash = this.hash
