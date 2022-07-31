@@ -1,5 +1,4 @@
 import { SubstrateEvent } from '@subql/types'
-import { checkIfExtrinsicExecuteSuccess } from '../helpers'
 import { VestingData, VestingScheduleAdded } from '../types'
 
 export class VestingScheduleHandler {
@@ -33,7 +32,6 @@ export class VestingScheduleHandler {
     vesting.signer = from.toString()
     vesting.to = to.toString()
     vesting.data = vesting_schedule as VestingData
-    vesting.success = checkIfExtrinsicExecuteSuccess(this.event.extrinsic)
     
     await vesting.save()
   }
