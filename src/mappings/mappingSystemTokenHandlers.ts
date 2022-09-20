@@ -1,23 +1,20 @@
 import { SubstrateEvent } from "@subql/types";
-import { AccountId, Balance, BlockNumber } from '@polkadot/types/interfaces/runtime';
-import type { Compact } from '@polkadot/types';
+import { Balance } from '@polkadot/types/interfaces/runtime';
 import { SystemTokenTransfer } from "../types/models/SystemTokenTransfer";
 import { checkIfExtrinsicExecuteSuccess } from "../helpers";
 
 export async function systemTokenTransferEvent(event: SubstrateEvent): Promise<void> {
-    const { event: { data: [from_origin, to_origin, amount_origin] } } = event;
-    const from = (from_origin as AccountId).toString();
-    const to = (to_origin as AccountId).toString();
-    const amount = (amount_origin as Balance).toBigInt();
+    const from = event.event.data[0];
+    const to = event.event.data[1];
+    const amount = event.event.data[2];
     const txHash = event.extrinsic.extrinsic.hash.toString();
 
-    const blockNumber = (event.extrinsic.block.block.header.number as Compact<BlockNumber>).toNumber();
-
-    let record = new SystemTokenTransfer(blockNumber.toString() + '-' + event.idx.toString());
-    record.from = from;
-    record.to = to;
+    let record = new SystemTokenTransfer(`${event.block.block.header.number.toNumber()}-${event.idx}`);
+    record.blockNumber = event.block.block.header.number.toBigInt();
+    record.from = from.toString();
+    record.to = to.toString();;
     record.txHash = txHash;
-    record.amount = amount;
+    record.amount =  (amount as Balance).toBigInt();;
     record.timestamp = event.block.timestamp;
     record.success = checkIfExtrinsicExecuteSuccess(event.extrinsic)
 
