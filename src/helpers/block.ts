@@ -1,4 +1,3 @@
-import { ApiPromise } from '@polkadot/api';
 import { Block } from '@polkadot/types/interfaces/runtime';
 
 export const getBlockTimestamp = (block: Block): Date => {

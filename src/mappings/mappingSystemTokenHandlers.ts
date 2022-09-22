@@ -14,8 +14,8 @@ export async function systemTokenTransferEvent(event: SubstrateEvent): Promise<v
     record.from = from.toString();
     record.to = to.toString();;
     record.txHash = txHash;
-    record.amount =  (amount as Balance).toBigInt();;
-    record.timestamp = event.block.timestamp;
+    record.amount =  (amount as Balance).toBigInt();
+    record.timestamp = new Date(event.extrinsic.block.timestamp).getTime();
     record.success = checkIfExtrinsicExecuteSuccess(event.extrinsic)
 
     await record.save();
