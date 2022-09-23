@@ -1,5 +1,6 @@
 import { SubstrateEvent } from '@subql/types'
-import { VestingData, VestingScheduleAdded } from '../types'
+import { VestingData } from '../types'
+import { VestingScheduleAdded } from '../types/models'
 
 export class VestingScheduleHandler {
   private event: SubstrateEvent 

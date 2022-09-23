@@ -1,6 +1,7 @@
 import { SubstrateExtrinsic } from '@subql/types'
 import { checkIfExtrinsicExecuteSuccess } from '../helpers'
-import { VestingData, VestingScheduleFailed } from '../types'
+import { VestingData } from '../types'
+import { VestingScheduleFailed } from '../types/models'
 
 export class VestingScheduleFailedHandler {
   private extrinsic: SubstrateExtrinsic 

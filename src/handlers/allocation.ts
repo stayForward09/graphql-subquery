@@ -1,5 +1,5 @@
 import { SubstrateEvent } from '@subql/types'
-import { Allocations } from '../types/models/Allocations'
+import { Allocations } from '../types/models'
 
 export class AllocationHandler {
   private event: SubstrateEvent 
