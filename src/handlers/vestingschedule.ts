@@ -27,12 +27,13 @@ export class VestingScheduleHandler {
 
   public async save () {
     let vesting = new VestingScheduleAdded(this.block + "-" + this.idx)
-    const [from, to, vesting_schedule] = this.data
+    logger.debug('Vesting added'  + JSON.stringify(this.event.toHuman()))
+    const [signer, to, vestingData] = this.data
     vesting.block = this.block
     vesting.txHash = this.hash
-    vesting.signer = from.toString()
+    vesting.signer = signer.toString()
     vesting.to = to.toString()
-    vesting.data = vesting_schedule as VestingData
+    vesting.data = vestingData as VestingData
     
     await vesting.save()
   }

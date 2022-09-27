@@ -31,18 +31,13 @@ dataSources:
           filter:
             module: balances
             method: Transfer
-        - handler: handleVestingSchedule
+        - handler: handleVestingScheduleAdded
           kind: substrate/EventHandler
           filter:
             module: vesting
-            event: VestingScheduleAdded
-        - handler: handleVestingScheduleFailed
-          kind: substrate/CallHandler
-          filter:
-            module: vesting
-            method: addVestingSchedule
+            method: VestingScheduleAdded
         - handler: handleAllocation
           kind: substrate/EventHandler
           filter:
             module: allocations
-            event: newallocation
+            method: newallocation

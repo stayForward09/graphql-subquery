@@ -5,7 +5,7 @@ export function tcWrapper<F extends AnyFunction>(fn: F) {
         try {
             return fn.apply(this, args)
         } catch (e) {
-            console.log(e)
+            logger.debug(e)
         }
     }) as F
 }
