@@ -1,8 +1,8 @@
-import { SubstrateEvent } from '@subql/types'
+import { SubstrateExtrinsic } from '@subql/types'
 import { AllocationHandler } from '../handlers/allocation'
 
-export async function handleAllocation(event: SubstrateEvent): Promise<void> {
-    const handler = new AllocationHandler(event)
+export async function handleAllocation(extrinsic: SubstrateExtrinsic): Promise<void> {
+    const handler = new AllocationHandler(extrinsic)
         
     await handler.save()
 }

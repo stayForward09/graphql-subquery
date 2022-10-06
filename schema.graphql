@@ -56,11 +56,15 @@ type VestingScheduleFailed @entity {
   data: VestingData
 }
 
+type AllocationEvent @jsonField {
+  who: String
+  amount: String
+}
+
 type Allocations @entity {
   id: ID!
-  account: String @index
   txHash: String @index
-  value: String
-  fee: String
-  proof: String
+  block: Int @index
+  data: [AllocationEvent]
+  success: Boolean
 }
