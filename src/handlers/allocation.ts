@@ -16,6 +16,10 @@ export class AllocationHandler {
     return this.event.idx
   }
 
+  get hash () {
+    return this.event.extrinsic.extrinsic.hash.toString()
+  }
+
   get data () {
     return this.event.event.data
   }
@@ -29,6 +33,7 @@ export class AllocationHandler {
     allocation.account = who.toString()
     allocation.value = value.toString()
     allocation.fee = fee.toString()
+    allocation.txHash = this.hash
     allocation.proof = proof.toString()
 
     await allocation.save()
