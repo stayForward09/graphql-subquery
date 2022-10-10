@@ -36,8 +36,8 @@ dataSources:
             module: vesting
             method: VestingScheduleAdded
         - handler: handleAllocation
-          kind: substrate/EventHandler
+          kind: substrate/CallHandler
           filter:
             module: allocations
-            method: newallocation
+            method: batch
 
