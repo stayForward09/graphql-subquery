@@ -3,6 +3,13 @@ type SpecVersion @entity {
   blockHeight: BigInt!
 }
 
+type Account @entity {
+  id: ID!
+  balance: BigInt!
+  transfers: [SystemTokenTransfer] @derivedFrom(field: "from")
+  vestingSchedule: [VestingScheduleAdded] @derivedFrom(field: "to")
+}
+
 type Event @entity {
   id: ID!
   module: String! @index
@@ -21,6 +28,17 @@ type Extrinsic @entity {
 }
 
 type SystemTokenTransfer @entity {
+  id: ID!
+  from: Account!
+  to: Account!
+  txHash: String @index
+  amount: BigInt @index
+  timestamp: Float @index
+  blockNumber: BigInt
+  success: Boolean
+}
+
+type BalanceDeposit @entity {
   id: ID!
   from: String @index
   to: String @index
@@ -42,8 +60,8 @@ type VestingScheduleAdded @entity {
   id: ID!
   block: Int @index
   txHash: String @index
-  signer: String @index
-  to: String @index
+  signer: Account!
+  to: Account!
   data: VestingData
 }
 
