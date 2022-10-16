@@ -40,6 +40,11 @@ dataSources:
           filter:
             module: uniques
             method: Transferred
+        - handler: handleCancelAllVestingSchedules
+          kind: substrate/CallHandler
+          filter:
+            module: vesting
+            method: cancelAllVestingSchedules
         - handler: handleAllocation
           kind: substrate/CallHandler
           filter:

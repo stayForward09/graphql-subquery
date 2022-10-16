@@ -32,6 +32,7 @@ export class VestingScheduleHandler {
     logger.debug('Vesting added'  + JSON.stringify(this.event.toHuman()))
     const [signer, to, vestingData] = this.data
     const account = await ensureAccount(to.toString());
+    api.query.vesting.
     await account.save()
     vesting.block = this.block
     vesting.txHash = this.hash
