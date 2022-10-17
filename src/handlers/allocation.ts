@@ -22,12 +22,12 @@ export class AllocationHandler {
   }
 
   get data () {
-    return this.extrinsic.events.map((event) => event.event.data.toHuman())
+    return this.extrinsic.events.map((event) => event.event.toHuman())
   }
 
   public async save () {    
+    logger.info(`AllocationHandler event 0' data: ${JSON.stringify(this.data[0])}`)
     const allocation = new Allocations(`${this.blockNumber}-${this.idx}`)
-    logger.info(`data: ${JSON.stringify(this.data[0])}`)
 
     allocation.data = this.data as AllocationEvent[]
     allocation.txHash = this.hash

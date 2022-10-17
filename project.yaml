@@ -25,27 +25,42 @@ dataSources:
       handlers:
         - handler: handleBlock
           kind: substrate/BlockHandler
-        - handler: systemTokenTransferEvent
+        - handler: handleBalanceTransferEvent
           kind: substrate/EventHandler
           filter:
             module: balances
             method: Transfer
-        - handler: handleVestingScheduleAdded
+        - handler: handleBalanceDepositEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Deposit
+        - handler: handleVestingScheduleAddedEvent
           kind: substrate/EventHandler
           filter:
             module: vesting
             method: VestingScheduleAdded
-        - handler: uniquesTransferEvent
+        - handler: handleUniquesTransferEvent
           kind: substrate/EventHandler
           filter:
             module: uniques
             method: Transferred
-        - handler: handleCancelAllVestingSchedules
+        - handler: handleNewAccountEvent
+          kind: substrate/EventHandler
+          filter:
+            module: system
+            method: NewAccount
+        - handler: handleKilledAccountEvent
+          kind: substrate/EventHandler
+          filter:
+            module: system
+            method: KilledAccount
+        - handler: handleCancelAllVestingSchedulesCall
           kind: substrate/CallHandler
           filter:
             module: vesting
             method: cancelAllVestingSchedules
-        - handler: handleAllocation
+        - handler: handleAllocationBatchCall
           kind: substrate/CallHandler
           filter:
             module: allocations

@@ -1,8 +1,8 @@
 import { SubstrateEvent } from '@subql/types'
 import { VestingData } from '../types'
-import { Account, VestingScheduleAdded } from '../types/models'
-import { Balance } from '@polkadot/types/interfaces/runtime';
+import { VestingScheduleAdded } from '../types/models'
 import { ensureAccount } from '../helpers/verifyAccount';
+import { updateAccountsVestingSchedule } from '../helpers/updateAccountsVestingSchedule';
 
 export class VestingScheduleHandler {
   private event: SubstrateEvent 
@@ -28,12 +28,10 @@ export class VestingScheduleHandler {
   }
 
   public async save () {
+    logger.debug('handleVestingScheduleAddedEvent event data: '  + JSON.stringify(this.data.toHuman()))
     let vesting = new VestingScheduleAdded(this.block + "-" + this.idx)
-    logger.debug('Vesting added'  + JSON.stringify(this.event.toHuman()))
     const [signer, to, vestingData] = this.data
-    const account = await ensureAccount(to.toString());
-    api.query.vesting.
-    await account.save()
+    await updateAccountsVestingSchedule([to.toString()])
     vesting.block = this.block
     vesting.txHash = this.hash
     vesting.signerId = signer.toString()

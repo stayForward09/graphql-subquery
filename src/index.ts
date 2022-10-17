@@ -1,8 +1,9 @@
+import '@polkadot/types-augment';
 import "@polkadot/api-augment";
 
-export * from "./mappings/mappingHandlers";
-export * from './mappings/mappingSystemTokenHandlers'
-export * from './mappings/mappingVestingScheduleHandlerAdded'
+export * from "./mappings/mappingOthersHandlers";
+export * from './mappings/mappingVestingHandlers'
 export * from './mappings/mappingAllocationHandler'
-export * from './mappings/mappingBalanceDepositEventHandler'
-export * from './mappings/mappingUniquesTransferEventHandler'
+export * from './mappings/mappingBalanceHandlers'
+export * from './mappings/mappingUniquesHandlers'
+export * from './mappings/mappingSystemHandler'

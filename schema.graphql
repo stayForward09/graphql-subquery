@@ -6,8 +6,8 @@ type SpecVersion @entity {
 type Account @entity {
   id: ID!
   balance: BigInt!
-  transfers: [SystemTokenTransfer] @derivedFrom(field: "from")
-  vestingSchedule: [VestingScheduleAdded] @derivedFrom(field: "to")
+  vestingSchedule: [VestingData]
+  transfers: [BalanceTransfer] @derivedFrom(field: "from")
 }
 
 type Event @entity {
@@ -27,7 +27,7 @@ type Extrinsic @entity {
   isSigned: Boolean!
 }
 
-type SystemTokenTransfer @entity {
+type BalanceTransfer @entity {
   id: ID!
   from: Account!
   to: Account!
@@ -65,18 +65,16 @@ type VestingScheduleAdded @entity {
   data: VestingData
 }
 
-type VestingScheduleFailed @entity {
-  id: ID!
-  block: Int @index
-  txHash: String @index
-  signer: String @index
-  to: String @index
-  data: VestingData
+type AllocationEventData @jsonField {
+  who: String
+  amount: String
 }
 
 type AllocationEvent @jsonField {
-  who: String
-  amount: String
+  method: String
+  section: String
+  index: String
+  data: AllocationEventData
 }
 
 type Allocations @entity {
@@ -84,5 +82,17 @@ type Allocations @entity {
   txHash: String @index
   block: Int @index
   data: [AllocationEvent]
+  success: Boolean
+}
+
+type UniquesTransfer @entity {
+  id: ID!
+  txHash: String @index
+  block: Int @index
+  from: Account
+  to: Account
+  collectionId: String @index
+  itemId: String @index
+  timestamp: Float @index
   success: Boolean
 }
