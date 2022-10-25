@@ -1,7 +1,6 @@
 import '@polkadot/types-augment';
 import "@polkadot/api-augment";
 
-export * from "./mappings/mappingOthersHandlers";
 export * from './mappings/mappingVestingHandlers'
 export * from './mappings/mappingAllocationHandler'
 export * from './mappings/mappingBalanceHandlers'
