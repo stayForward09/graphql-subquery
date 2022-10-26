@@ -31,13 +31,12 @@ export class VestingScheduleHandler {
     logger.debug('handleVestingScheduleAddedEvent event data: '  + JSON.stringify(this.data.toHuman()))
     let vesting = new VestingScheduleAdded(this.block + "-" + this.idx)
     const [signer, to, vestingData] = this.data
-    await updateAccountsVestingSchedule([to.toString()])
     vesting.block = this.block
     vesting.txHash = this.hash
     vesting.signerId = signer.toString()
     vesting.toId = to.toString()
     vesting.data = vestingData as VestingData
     
-    await vesting.save()
+    return Promise.all([vesting.save(), updateAccountsVestingSchedule([to.toString()])]);
   }
 }

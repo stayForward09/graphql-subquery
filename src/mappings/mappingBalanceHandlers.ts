@@ -4,7 +4,7 @@ import { checkIfExtrinsicExecuteSuccess } from "../helpers";
 import { BalanceTransfer } from "../types/models";
 import { updateAccountBalances } from "../helpers/updateAccountsBalance";
 
-export async function handleBalanceTransferEvent(event: SubstrateEvent): Promise<void> {
+export async function handleBalanceTransferEvent(event: SubstrateEvent) {
     const from = event.event.data[0];
     const to = event.event.data[1];
     if(!from || !to) {
@@ -13,7 +13,6 @@ export async function handleBalanceTransferEvent(event: SubstrateEvent): Promise
     }
     const amount = event.event.data[2];
     const txHash = event.extrinsic.extrinsic.hash.toString();
-    await updateAccountBalances([from.toString(), to.toString()]);
     let record = new BalanceTransfer(`${event.block.block.header.number.toNumber()}-${event.idx}`);
     record.blockNumber = event.block.block.header.number.toBigInt();
     record.fromId = from.toString();
@@ -23,12 +22,11 @@ export async function handleBalanceTransferEvent(event: SubstrateEvent): Promise
     record.timestamp = new Date(event.extrinsic.block.timestamp).getTime();
     record.success = checkIfExtrinsicExecuteSuccess(event.extrinsic)
 
-    await record.save();
+    return Promise.all([record.save(), updateAccountBalances([from.toString(), to.toString()])]);
 }
 
-export async function handleBalanceDepositEvent(event: SubstrateEvent): Promise<void> {
+export async function handleBalanceDepositEvent(event: SubstrateEvent) {
     const who = event.event.data[0];
     logger.debug('handleBalanceDepositEvent mapped: '  + who.toString())
-    await updateAccountBalances([who.toString()]);
-    return;
+    return updateAccountBalances([who.toString()]);
 }
