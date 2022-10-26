@@ -7,7 +7,7 @@ export const updateAccountsVestingSchedule = async (accounts: string[]) => {
         const vestingSchedule = vestingSchedules[index];
         return { account, vestingSchedule };
     });
-    await Promise.all(accountsWithVestingSchedules.map(async ({ account, vestingSchedule }) => {
+    return Promise.all(accountsWithVestingSchedules.map(async ({ account, vestingSchedule }) => {
         const accountEntity = await ensureAccount(account);
         accountEntity.vestingSchedule = vestingSchedule.toHuman() as VestingData[];
         logger.debug('Vesting schedule updated'  + JSON.stringify(vestingSchedule.toHuman()))
