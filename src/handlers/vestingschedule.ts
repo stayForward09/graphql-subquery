@@ -1,5 +1,8 @@
 import { SubstrateEvent } from '@subql/types'
-import { VestingData, VestingScheduleAdded } from '../types'
+import { VestingData } from '../types'
+import { VestingScheduleAdded } from '../types/models'
+import { ensureAccount } from '../helpers/verifyAccount';
+import { updateAccountsVestingSchedule } from '../helpers/updateAccountsVestingSchedule';
 
 export class VestingScheduleHandler {
   private event: SubstrateEvent 
@@ -25,14 +28,15 @@ export class VestingScheduleHandler {
   }
 
   public async save () {
+    logger.debug('handleVestingScheduleAddedEvent event data: '  + JSON.stringify(this.data.toHuman()))
     let vesting = new VestingScheduleAdded(this.block + "-" + this.idx)
-    const [from, to, vesting_schedule] = this.data
+    const [signer, to, vestingData] = this.data
     vesting.block = this.block
     vesting.txHash = this.hash
-    vesting.signer = from.toString()
-    vesting.to = to.toString()
-    vesting.data = vesting_schedule as VestingData
+    vesting.signerId = signer.toString()
+    vesting.toId = to.toString()
+    vesting.data = vestingData as VestingData
     
-    await vesting.save()
+    return Promise.all([vesting.save(), updateAccountsVestingSchedule([to.toString()])]);
   }
 }

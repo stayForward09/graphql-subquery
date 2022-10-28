@@ -8,14 +8,14 @@ runner:
   query:
     name: '@subql/query'
     version: '*'
-repository: 'https://github.com/NodleCode/subquery.git'
+description: 'Subquery indexer for Nodle network (testnet).'
+repository: https://github.com/NodleCode/subquery.git
 schema:
   file: ./schema.graphql
 network:
-  chainId: '0x97da7ede98d7bad4e36b4d734b6055425a3be036da2a332ea5a7037656427a21'
-  endpoint: 'wss://nodle-parachain.api.onfinality.io/public-ws'
-  dictionary: 'https://explorer.subquery.network/subquery/subquery/nodle-parachain-dictionary'
-  chaintypes:
+  chainId: '0x0fd167da222f10dae826a0433fe4daadcf4a36c2a6bd5c1b085857d5b79030af'
+  endpoint: wss://nodle-paradis.api.onfinality.io/public-ws
+chaintypes:
     file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/Runtime
@@ -23,25 +23,44 @@ dataSources:
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: handleBlock
-          kind: substrate/BlockHandler
-        - handler: systemTokenTransferEvent
+        - handler: handleBalanceTransferEvent
           kind: substrate/EventHandler
           filter:
             module: balances
             method: Transfer
-        - handler: handleVestingSchedule
+        - handler: handleBalanceDepositEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Deposit
+        - handler: handleVestingScheduleAddedEvent
           kind: substrate/EventHandler
           filter:
             module: vesting
-            event: VestingScheduleAdded
-        - handler: handleVestingScheduleFailed
+            method: VestingScheduleAdded
+        - handler: handleUniquesTransferEvent
+          kind: substrate/EventHandler
+          filter:
+            module: uniques
+            method: Transferred
+        - handler: handleNewAccountEvent
+          kind: substrate/EventHandler
+          filter:
+            module: system
+            method: NewAccount
+        - handler: handleKilledAccountEvent
+          kind: substrate/EventHandler
+          filter:
+            module: system
+            method: KilledAccount
+        - handler: handleCancelAllVestingSchedulesCall
           kind: substrate/CallHandler
           filter:
             module: vesting
-            method: addVestingSchedule
-        - handler: handleAllocation
-          kind: substrate/EventHandler
+            method: cancelAllVestingSchedules
+        - handler: handleAllocationBatchCall
+          kind: substrate/CallHandler
           filter:
             module: allocations
-            event: newallocation
+            method: batch
+

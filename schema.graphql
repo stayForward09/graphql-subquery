@@ -1,32 +1,29 @@
-type SpecVersion @entity {
-  id: ID! #specVersion
-  blockHeight: BigInt!
-}
-
-type Event @entity {
+type Account @entity {
   id: ID!
-  module: String! @index
-  event: String! @index
-  blockHeight: BigInt! @index
+  balance: BigInt!
+  vestingSchedule: [VestingData]
+  transfers: [BalanceTransfer] @derivedFrom(field: "from")
 }
 
-type Extrinsic @entity {
+type BalanceTransfer @entity {
   id: ID!
-  txHash: String! @index
-  module: String! @index
-  call: String! @index
-  blockHeight: BigInt! @index
-  success: Boolean!
-  isSigned: Boolean!
+  from: Account!
+  to: Account!
+  txHash: String @index
+  amount: BigInt @index
+  timestamp: Float @index
+  blockNumber: BigInt
+  success: Boolean
 }
 
-type SystemTokenTransfer @entity {
+type BalanceDeposit @entity {
   id: ID!
   from: String @index
   to: String @index
   txHash: String @index
   amount: BigInt @index
-  timestamp: Date @index
+  timestamp: Float @index
+  blockNumber: BigInt
   success: Boolean
 }
 
@@ -34,31 +31,46 @@ type VestingData @jsonField {
   start: Int
   period: Int
   periodCount: Int
-  PerPeriod: BigInt
+  perPeriod: BigInt
 }
 
 type VestingScheduleAdded @entity {
   id: ID!
   block: Int @index
   txHash: String @index
-  signer: String @index
-  to: String @index
+  signer: Account!
+  to: Account!
   data: VestingData
 }
 
-type VestingScheduleFailed @entity {
-  id: ID!
-  block: Int @index
-  txHash: String @index
-  signer: String @index
-  to: String @index
-  data: VestingData
+type AllocationEventData @jsonField {
+  who: String
+  amount: String
+}
+
+type AllocationEvent @jsonField {
+  method: String
+  section: String
+  index: String
+  data: AllocationEventData
 }
 
 type Allocations @entity {
   id: ID!
-  account: String @index
-  value: String
-  fee: String
-  proof: String
+  txHash: String @index
+  block: Int @index
+  data: [AllocationEvent]
+  success: Boolean
+}
+
+type UniquesTransfer @entity {
+  id: ID!
+  txHash: String @index
+  block: Int @index
+  from: Account
+  to: Account
+  collectionId: String @index
+  itemId: String @index
+  timestamp: Float @index
+  success: Boolean
 }

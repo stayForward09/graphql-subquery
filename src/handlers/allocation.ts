@@ -1,35 +1,38 @@
-import { SubstrateEvent } from '@subql/types'
-import { Allocations } from '../types/models/Allocations'
+import { SubstrateExtrinsic } from '@subql/types'
+import { AllocationEvent } from '../types'
+import { Allocations } from '../types/models'
 
 export class AllocationHandler {
-  private event: SubstrateEvent 
+  private extrinsic: SubstrateExtrinsic 
 
-  constructor(event: SubstrateEvent) {
-    this.event = event
+  constructor(extrinsic: SubstrateExtrinsic) {
+    this.extrinsic = extrinsic
   }
 
   get blockNumber () {
-    return this.event.block.block.header.number.toBigInt()
+    return this.extrinsic.block.block.header.number.toNumber()
   }
 
   get idx () {
-    return this.event.idx
+    return this.extrinsic.idx
+  }
+
+  get hash () {
+    return this.extrinsic.extrinsic.hash.toString()
   }
 
   get data () {
-    return this.event.event.data
+    return this.extrinsic.events.map((event) => event.event.toHuman())
   }
 
   public async save () {    
+    logger.info(`AllocationHandler event 0' data: ${JSON.stringify(this.data[0])}`)
     const allocation = new Allocations(`${this.blockNumber}-${this.idx}`)
-    // logger.info(`data: ${this.data}`)
 
-    const [who, value, fee, proof] = this.data
-
-    allocation.account = who.toString()
-    allocation.value = value.toString()
-    allocation.fee = fee.toString()
-    allocation.proof = proof.toString()
+    allocation.data = this.data as AllocationEvent[]
+    allocation.txHash = this.hash
+    allocation.block = this.blockNumber
+    allocation.success = this.extrinsic.success
 
     await allocation.save()
   }
