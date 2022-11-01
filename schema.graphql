@@ -67,8 +67,8 @@ type UniquesTransfer @entity {
   id: ID!
   txHash: String @index
   block: Int @index
-  from: Account
-  to: Account
+  from: String @index
+  to: String @index
   collectionId: String @index
   itemId: String @index
   timestamp: Float @index
