@@ -16,7 +16,7 @@ export async function handleUniquesTransferEvent(
   uniqueTransfer.block = event.block.block.header.number.toNumber();
   uniqueTransfer.txHash = txHash;
   uniqueTransfer.from = from.toString();
-  uniqueTransfer.toId = to.toString();
+  uniqueTransfer.to = to.toString();
   uniqueTransfer.collectionId = collectionId.toString();
   uniqueTransfer.itemId = itemId.toString();
   uniqueTransfer.timestamp = new Date(
