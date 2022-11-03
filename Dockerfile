@@ -8,4 +8,4 @@ RUN cd app\
     && yarn install\
     && yarn codegen && yarn build
 
-CMD ["-f=/app", "--db-schema=app", "--log-level=debug", "--disable-historical=false", "--progress=plain"]
+CMD ["-f=/app", "--db-schema=app", "--log-level=info", "--disable-historical=false", "--worker=5", "--batch-size=50"]
