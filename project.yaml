@@ -15,6 +15,7 @@ schema:
 network:
   chainId: '0x0fd167da222f10dae826a0433fe4daadcf4a36c2a6bd5c1b085857d5b79030af'
   endpoint: wss://nodle-paradis.api.onfinality.io/public-ws
+  dictionary: https://api.subquery.network/sq/Douglasacost/nodle-testnet-dictionary
 chaintypes:
     file: ./dist/chaintypes.js
 dataSources:
