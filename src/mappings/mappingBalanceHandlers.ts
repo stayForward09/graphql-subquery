@@ -22,7 +22,17 @@ export async function handleBalanceTransferEvent(event: SubstrateEvent) {
     record.timestamp = new Date(event.extrinsic.block.timestamp).getTime();
     record.success = checkIfExtrinsicExecuteSuccess(event.extrinsic)
 
-    return Promise.all([record.save(), updateAccountBalances([from.toString(), to.toString()])]);
+    return record.save();
+}
+
+export async function handleBalanceTransferEventChainState(event: SubstrateEvent) {
+    const from = event.event.data[0];
+    const to = event.event.data[1];
+    if(!from || !to) {
+        logger.debug('Some of the from or to address is null', JSON.stringify(event.toHuman()));
+        return;
+    }
+    return Promise.all([updateAccountBalances([from.toString(), to.toString()])]);
 }
 
 export async function handleBalanceDepositEvent(event: SubstrateEvent) {

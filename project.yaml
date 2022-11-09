@@ -29,6 +29,11 @@ dataSources:
           filter:
             module: balances
             method: Transfer
+        - handler: handleBalanceTransferEventChainState
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Transfer
         - handler: handleBalanceDepositEvent
           kind: substrate/EventHandler
           filter:
