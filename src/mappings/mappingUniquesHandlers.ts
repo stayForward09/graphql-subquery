@@ -12,16 +12,16 @@ export async function handleUniquesTransferEvent(
   const uniqueTransfer = new UniquesTransfer(
     `${event.block.block.header.number.toNumber()}-${event.idx}`
   );
-  const txHash = event.extrinsic.extrinsic.hash.toString();
+  const txHash = event.extrinsic?.extrinsic.hash.toString();
   uniqueTransfer.block = event.block.block.header.number.toNumber();
   uniqueTransfer.txHash = txHash;
   uniqueTransfer.from = from.toString();
   uniqueTransfer.to = to.toString();
   uniqueTransfer.collectionId = collectionId.toString();
   uniqueTransfer.itemId = itemId.toString();
-  uniqueTransfer.timestamp = new Date(
+  uniqueTransfer.timestamp = event.extrinsic ? new Date(
     event.extrinsic.block.timestamp
-  ).getTime();
+  ).getTime() : undefined;
 
   return uniqueTransfer.save();
 }
