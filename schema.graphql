@@ -5,6 +5,21 @@ type Account @entity {
   transfers: [BalanceTransfer] @derivedFrom(field: "from")
 }
 
+type Collection @entity {
+  id: ID!
+  collectionId: String!
+  metadataCid: String
+  items: [Item] @derivedFrom(field: "collection")
+}
+
+type Item @entity {
+  id: ID!
+  itemId: String!
+  collection: Collection!
+  metadataCid: String
+  owner: Account
+}
+
 type BalanceTransfer @entity {
   id: ID!
   from: Account!
@@ -69,8 +84,9 @@ type UniquesTransfer @entity {
   block: Int @index
   from: String @index
   to: String @index
-  collectionId: String @index
-  itemId: String @index
+  collection: Collection!
+  item: Item!
+  fee: BigInt!
   timestamp: Float @index
   success: Boolean
 }

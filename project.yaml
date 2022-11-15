@@ -20,53 +20,24 @@ chaintypes:
     file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 1
+    startBlock: 1088055
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: handleBalanceTransferEvent
-          kind: substrate/EventHandler
-          filter:
-            module: balances
-            method: Transfer
-        - handler: handleBalanceTransferEventChainState
-          kind: substrate/EventHandler
-          filter:
-            module: balances
-            method: Transfer
-        - handler: handleBalanceDepositEvent
-          kind: substrate/EventHandler
-          filter:
-            module: balances
-            method: Deposit
-        - handler: handleVestingScheduleAddedEvent
-          kind: substrate/EventHandler
-          filter:
-            module: vesting
-            method: VestingScheduleAdded
         - handler: handleUniquesTransferEvent
           kind: substrate/EventHandler
           filter:
             module: uniques
             method: Transferred
-        - handler: handleNewAccountEvent
+        - handler: handleUniquesMetadataSetEvent
           kind: substrate/EventHandler
           filter:
-            module: system
-            method: NewAccount
-        - handler: handleKilledAccountEvent
+            module: uniques
+            method: MetadataSet
+        - handler: handleUniquesCollectionMetadataSetEvent
           kind: substrate/EventHandler
           filter:
-            module: system
-            method: KilledAccount
-        - handler: handleCancelAllVestingSchedulesCall
-          kind: substrate/CallHandler
-          filter:
-            module: vesting
-            method: cancelAllVestingSchedules
-        - handler: handleAllocationBatchCall
-          kind: substrate/CallHandler
-          filter:
-            module: allocations
-            method: batch
+            module: uniques
+            method: CollectionMetadataSet
+        
 

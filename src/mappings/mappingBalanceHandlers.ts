@@ -11,6 +11,7 @@ export async function handleBalanceTransferEvent(event: SubstrateEvent) {
         logger.debug('Some of the from or to address is null', JSON.stringify(event.toHuman()));
         return;
     }
+    
     const amount = event.event.data[2];
     const txHash = event.extrinsic.extrinsic.hash.toString();
     let record = new BalanceTransfer(`${event.block.block.header.number.toNumber()}-${event.idx}`);
