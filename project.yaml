@@ -39,5 +39,13 @@ dataSources:
           filter:
             module: uniques
             method: CollectionMetadataSet
-        
-
+        - handler: handleBalanceTransferEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Transfer
+        - handler: handleAllocationBatchCall
+          kind: substrate/CallHandler
+          filter:
+            module: allocations
+            method: batch
