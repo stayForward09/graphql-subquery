@@ -12,15 +12,16 @@ export async function handleBalanceTransferEvent(event: SubstrateEvent) {
         return;
     }
     const amount = event.event.data[2];
-    const txHash = event.extrinsic.extrinsic.hash.toString();
     let record = new BalanceTransfer(`${event.block.block.header.number.toNumber()}-${event.idx}`);
     record.blockNumber = event.block.block.header.number.toBigInt();
     record.fromId = from.toString();
     record.toId = to.toString();
-    record.txHash = txHash;
     record.amount =  (amount as Balance).toBigInt();
-    record.timestamp = new Date(event.extrinsic.block.timestamp).getTime();
-    record.success = checkIfExtrinsicExecuteSuccess(event.extrinsic)
+    if (event.extrinsic) {
+        record.txHash = event.extrinsic.extrinsic.hash.toString();
+        record.timestamp = new Date(event.extrinsic.block.timestamp).getTime();
+        record.success = checkIfExtrinsicExecuteSuccess(event.extrinsic)
+    }
 
     return record.save();
 }
