@@ -13,6 +13,7 @@ export async function handleUniquesTransferEvent(
   const uniqueTransfer = new UniquesTransfer(
     `${event.block.block.header.number.toNumber()}-${event.idx}`
   );
+
   event.extrinsic.events.forEach((event) => {
     if (event.event.method === "TransactionFeePaid") {
       logger.debug("TransactionFeePaid", JSON.stringify(event.event.data.toHuman()));
@@ -20,16 +21,18 @@ export async function handleUniquesTransferEvent(
       uniqueTransfer.fee = event.event.data['actualFee'].toBigInt();
     }
   });
-  const txHash = event.extrinsic.extrinsic.hash.toString();
+
   uniqueTransfer.block = event.block.block.header.number.toNumber();
-  uniqueTransfer.txHash = txHash;
   uniqueTransfer.from = from.toString();
   uniqueTransfer.to = to.toString();
   uniqueTransfer.collectionId = collectionId.toString();
   uniqueTransfer.itemId = itemId.toString();
-  uniqueTransfer.timestamp = new Date(
+  if (event.extrinsic) {
+    uniqueTransfer.txHash = event.extrinsic.extrinsic.hash.toString();
+    uniqueTransfer.timestamp = new Date(
     event.extrinsic.block.timestamp
   ).getTime();
+  }
 
   const collection = await ensureCollection(collectionId.toString());
   const item = await ensureItem(collectionId.toString(), itemId.toString());

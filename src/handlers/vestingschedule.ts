@@ -16,7 +16,7 @@ export class VestingScheduleHandler {
   }
 
   get hash () {
-    return this.event.extrinsic.extrinsic.hash.toString()
+    return this.event.extrinsic?.extrinsic.hash.toString()
   }
 
   get block () {
