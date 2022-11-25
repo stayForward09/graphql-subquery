@@ -108,8 +108,9 @@ export const handleUniquesBurnedEvent = async (
     "handleUniquesBurnedEvent added: " + JSON.stringify(event.toHuman())
   );
   const itemId = event.event.data[1];
+  const collectionId = event.event.data[0];
 
-  const item = await Item.get(itemId.toString());
+  const item = await ensureItem(collectionId.toString(), itemId.toString(), event.block.block.header.number.toNumber().toString());
   item.isBurned = true;
   return item.save();
 }

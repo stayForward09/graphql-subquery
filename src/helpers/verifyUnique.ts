@@ -13,12 +13,13 @@ export const ensureCollection = async (collectionId: string, idSubfix: string) =
 }
 
 export const ensureItem = async (collectionId: string, itemId: string, idSubfix: string) => {
-    let items = await Item.getByItemCollection(`${collectionId}-${itemId}`);
+    let items = await Item.getByCollectionItemKey(`${collectionId}-${itemId}`);
     let item = items.find((c) => !c.isBurned);
     if (!item) {
         logger.warn('Item not found, creating new item', itemId);
         item = new Item(`${collectionId}-${itemId}-${idSubfix}`);
         item.collectionId = collectionId;
+        item.collectionItemKey = `${collectionId}-${itemId}`;
         item.itemId = itemId;
         item.isBurned = false;
     }
