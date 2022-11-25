@@ -1,21 +1,23 @@
 import { Collection, Item } from "../types";
 
-export const ensureCollection = async (collectionId: string) => {
-    let collection = await Collection.get(collectionId);
+export const ensureCollection = async (collectionId: string, idSubfix: string) => {
+    const collections = await Collection.getByCollectionId(collectionId);
+    let collection = collections.find((c) => !c.isDestroyed);
     if (!collection) {
-        // logger.debug('Collection not found, creating new collection', collectionId);
-        collection = new Collection(`${collectionId}-${new Date().getTime()}`);
+        logger.warn('Collection not found, creating new collection', collectionId);
+        collection = new Collection(`${collectionId}-${idSubfix}`);
         collection.collectionId = collectionId;
         collection.isDestroyed = false;
     }
     return collection;
 }
 
-export const ensureItem = async (collectionId: string, itemId: string) => {
-    let item = await Item.get(`${collectionId}-${itemId}`);
+export const ensureItem = async (collectionId: string, itemId: string, idSubfix: string) => {
+    let items = await Item.getByItemCollection(`${collectionId}-${itemId}`);
+    let item = items.find((c) => !c.isBurned);
     if (!item) {
-        // logger.debug('Item not found, creating new item', itemId);
-        item = new Item(`${collectionId}-${itemId}`);
+        logger.warn('Item not found, creating new item', itemId);
+        item = new Item(`${collectionId}-${itemId}-${idSubfix}`);
         item.collectionId = collectionId;
         item.itemId = itemId;
         item.isBurned = false;
