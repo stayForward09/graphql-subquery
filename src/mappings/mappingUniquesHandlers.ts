@@ -14,6 +14,7 @@ export async function handleUniquesTransferEvent(
   const collectionId = event.event.data[0];
   const itemId = event.event.data[1];
   const blockNumber = event.block.block.header.number.toNumber();
+  const id = `${blockNumber}-${event.idx}`
 
   if (!from || !to || !collectionId || !itemId) {
     logger.error(
@@ -23,9 +24,7 @@ export async function handleUniquesTransferEvent(
     return;
   }
 
-  const uniqueTransfer = new UniquesTransfer(
-    `${event.block.block.header.number.toNumber()}-${event.idx}`
-  );
+  const uniqueTransfer = new UniquesTransfer(id);
 
   uniqueTransfer.block = blockNumber;
   uniqueTransfer.from = from.toString();
@@ -43,8 +42,8 @@ export async function handleUniquesTransferEvent(
     ).getTime();
   }
 
-  const collection = await ensureCollection(collectionId.toString(), blockNumber.toString());
-  const item = await ensureItem(collectionId.toString(), itemId.toString(), blockNumber.toString());
+  const collection = await ensureCollection(collectionId.toString(), id);
+  const item = await ensureItem(collectionId.toString(), itemId.toString(), id);
   item.owner = to.toString();
   uniqueTransfer.itemId = item.id;
   uniqueTransfer.collectionId = collection.id;
@@ -61,10 +60,11 @@ export const handleUniquesMetadataSetEvent = async (
   const collectionId = event.event.data[0];
   const itemId = event.event.data[1];
   const data = event.event.data[2];
-  const blockNumber = event.block.block.header.number.toNumber().toString();
+  const blockNumber = event.block.block.header.number.toNumber();
+  const id = `${blockNumber}-${event.idx}`
 
-  const collection = await ensureCollection(collectionId.toString(), blockNumber);
-  const item = await ensureItem(collectionId.toString(), itemId.toString(), blockNumber);
+  const collection = await ensureCollection(collectionId.toString(), id);
+  const item = await ensureItem(collectionId.toString(), itemId.toString(), id);
   item.metadataCid = data.toHuman().toString();
   item.collectionId = collection.id;
   await collection.save()
@@ -79,9 +79,10 @@ export const handleUniquesCollectionMetadataSetEvent = async (
   );
   const collectionId = event.event.data[0];
   const data = event.event.data[1];
-  const blockNumber = event.block.block.header.number.toNumber().toString();
+  const blockNumber = event.block.block.header.number.toNumber();
+  const id = `${blockNumber}-${event.idx}`
 
-  const collection = await ensureCollection(collectionId.toString(), blockNumber);
+  const collection = await ensureCollection(collectionId.toString(), id);
   collection.metadataCid = data.toHuman().toString();
 
   return collection.save();
@@ -94,9 +95,10 @@ export const handleUniquesDestroyedEvent = async (
     "handleUniquesDestroyedEvent added: " + JSON.stringify(event.toHuman())
   );
   const collectionId = event.event.data[0];
-  const blockNumber = event.block.block.header.number.toNumber().toString();
+  const blockNumber = event.block.block.header.number.toNumber();
+  const id = `${blockNumber}-${event.idx}`
 
-  const collection = await ensureCollection(collectionId.toString(), blockNumber);
+  const collection = await ensureCollection(collectionId.toString(), id);
   collection.isDestroyed = true;
   return collection.save()
 }
@@ -109,8 +111,10 @@ export const handleUniquesBurnedEvent = async (
   );
   const itemId = event.event.data[1];
   const collectionId = event.event.data[0];
+  const blockNumber = event.block.block.header.number.toNumber();
+  const id = `${blockNumber}-${event.idx}`
 
-  const item = await ensureItem(collectionId.toString(), itemId.toString(), event.block.block.header.number.toNumber().toString());
+  const item = await ensureItem(collectionId.toString(), itemId.toString(), id);
   item.isBurned = true;
   return item.save();
 }
@@ -124,10 +128,11 @@ export const handleUniquesIssuedEvent = async (
   const collectionId = event.event.data[0];
   const itemId = event.event.data[1];
   const owner = event.event.data[2];
-  const blockNumber = event.block.block.header.number.toNumber().toString();
+  const blockNumber = event.block.block.header.number.toNumber();
+  const id = `${blockNumber}-${event.idx}`
 
-  const collection = await ensureCollection(collectionId.toString(), blockNumber);
-  const item = await ensureItem(collectionId.toString(), itemId.toString(), blockNumber);
+  const collection = await ensureCollection(collectionId.toString(), id);
+  const item = await ensureItem(collectionId.toString(), itemId.toString(), id);
   item.owner = owner.toString();
   item.collectionId = collection.id;
   item.isBurned = false;
@@ -142,9 +147,10 @@ export const handleUniquesCreatedEvent = async (
     "handleUniquesCreatedEvent added: " + JSON.stringify(event.toHuman())
   );
   const collectionId = event.event.data[0];
-  const blockNumber = event.block.block.header.number.toNumber().toString();
+  const blockNumber = event.block.block.header.number.toNumber();
+  const id = `${blockNumber}-${event.idx}`
 
-  const collection = await ensureCollection(collectionId.toString(), blockNumber);
+  const collection = await ensureCollection(collectionId.toString(), id);
   collection.isDestroyed = false;
   return collection.save()
 }
