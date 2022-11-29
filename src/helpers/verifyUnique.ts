@@ -1,25 +1,44 @@
 import { Collection, Item } from "../types";
+import { Codec } from '@polkadot/types/types';
 
-export const ensureCollection = async (collectionId: string, idSubfix: string) => {
-    const collections = await Collection.getByCollectionId(collectionId);
+type EnsureCollection = {
+    idx: number;
+    blockNumber: number;
+    collectionId: Codec;
+}
+
+type EnsureItem = EnsureCollection & {
+    itemId: Codec;
+}
+
+export const ensureCollection = async ({
+    collectionId, blockNumber, idx
+}: EnsureCollection) => {
+    const collectionIdString = collectionId.toString();
+    const collections = await Collection.getByCollectionId(collectionIdString);
     let collection = collections.find((c) => !c.isDestroyed);
     if (!collection) {
-        logger.warn('Collection not found, creating new collection', collectionId);
-        collection = new Collection(`${collectionId}-${idSubfix}`);
-        collection.collectionId = collectionId;
+        const id = `${collectionIdString}-${blockNumber}-${idx}`;
+        logger.warn('Collection not found, creating new collection', collectionIdString);
+        collection = new Collection(id);
+        collection.collectionId = collectionIdString;
         collection.isDestroyed = false;
     }
     return collection;
 }
 
-export const ensureItem = async (collectionId: string, itemId: string, idSubfix: string) => {
-    let items = await Item.getByCollectionItemKey(`${collectionId}-${itemId}`);
+export const ensureItem = async ({
+    collectionId, itemId, blockNumber, idx
+}: EnsureItem) => {
+    const itemIdString = itemId.toString();
+    let items = await Item.getByCollectionItemKey(`${collectionId}-${itemIdString}`);
     let item = items.find((c) => !c.isBurned);
     if (!item) {
-        logger.warn('Item not found, creating new item', itemId);
-        item = new Item(`${collectionId}-${itemId}-${idSubfix}`);
-        item.collectionItemKey = `${collectionId}-${itemId}`;
-        item.itemId = itemId;
+        const id = `${collectionId}-${itemIdString}-${blockNumber}-${idx}`;
+        logger.warn('Item not found, creating new item', itemIdString);
+        item = new Item(id);
+        item.collectionItemKey = `${collectionId}-${itemIdString}`;
+        item.itemId = itemIdString;
         item.isBurned = false;
     }
     return item;
