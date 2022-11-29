@@ -18,7 +18,6 @@ export const ensureItem = async (collectionId: string, itemId: string, idSubfix:
     if (!item) {
         logger.warn('Item not found, creating new item', itemId);
         item = new Item(`${collectionId}-${itemId}-${idSubfix}`);
-        item.collectionId = collectionId;
         item.collectionItemKey = `${collectionId}-${itemId}`;
         item.itemId = itemId;
         item.isBurned = false;
