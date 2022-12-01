@@ -2,24 +2,30 @@ type Account @entity {
   id: ID!
   balance: BigInt!
   vestingSchedule: [VestingData]
-  transfers: [BalanceTransfer] @derivedFrom(field: "from")
+}
+
+type Collection @entity {
+  id: ID!
+  collectionId: String! @index
+  metadataCid: String
+  isDestroyed: Boolean!
+  items: [Item] @derivedFrom(field: "collection")
+}
+
+type Item @entity {
+  id: ID!
+  itemId: String! @index
+  collectionItemKey: String! @index
+  collection: Collection!
+  metadataCid: String
+  isBurned: Boolean!
+  owner: String
 }
 
 type BalanceTransfer @entity {
   id: ID!
-  from: Account!
-  to: Account!
-  txHash: String @index
-  amount: BigInt @index
-  timestamp: Float @index
-  blockNumber: BigInt
-  success: Boolean
-}
-
-type BalanceDeposit @entity {
-  id: ID!
-  from: String @index
-  to: String @index
+  from: String!
+  to: String!
   txHash: String @index
   amount: BigInt @index
   timestamp: Float @index
@@ -69,8 +75,9 @@ type UniquesTransfer @entity {
   block: Int @index
   from: String @index
   to: String @index
-  collectionId: String @index
-  itemId: String @index
+  collection: Collection!
+  item: Item!
+  fee: BigInt
   timestamp: Float @index
   success: Boolean
 }
