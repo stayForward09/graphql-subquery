@@ -23,48 +23,35 @@ dataSources:
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: handleUniquesTransferEvent
-          kind: substrate/EventHandler
-          filter:
-            module: uniques
-            method: Transferred
-        - handler: handleUniquesBurnedEvent
-          kind: substrate/EventHandler
-          filter:
-            module: uniques
-            method: Burned
-        - handler: handleUniquesDestroyedEvent
-          kind: substrate/EventHandler
-          filter:
-            module: uniques
-            method: Destroyed
-        - handler: handleUniquesIssuedEvent
-          kind: substrate/EventHandler
-          filter:
-            module: uniques
-            method: Issued
-        - handler: handleUniquesIssuedEvent
-          kind: substrate/EventHandler
-          filter:
-            module: uniques
-            method: Created
-        - handler: handleUniquesMetadataSetEvent
-          kind: substrate/EventHandler
-          filter:
-            module: uniques
-            method: MetadataSet
-        - handler: handleUniquesCollectionMetadataSetEvent
-          kind: substrate/EventHandler
-          filter:
-            module: uniques
-            method: CollectionMetadataSet
-        - handler: handleBalanceTransferEvent
+        - handler: handleBalanceTransferEventChainState
           kind: substrate/EventHandler
           filter:
             module: balances
             method: Transfer
-        - handler: handleAllocationBatchCall
+        - handler: handleBalanceDepositEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Deposit
+        - handler: handleVestingScheduleAddedEvent
+          kind: substrate/EventHandler
+          filter:
+            module: vesting
+            method: VestingScheduleAdded
+        - handler: handleNewAccountEvent
+          kind: substrate/EventHandler
+          filter:
+            module: system
+            method: NewAccount
+        - handler: handleKilledAccountEvent
+          kind: substrate/EventHandler
+          filter:
+            module: system
+            method: KilledAccount
+        - handler: handleCancelAllVestingSchedulesCall
           kind: substrate/CallHandler
           filter:
-            module: allocations
-            method: batch
+            module: vesting
+            method: cancelAllVestingSchedules
+
+

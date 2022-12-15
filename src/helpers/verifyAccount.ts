@@ -1,12 +1,14 @@
+import { Codec } from '@polkadot/types/types';
 import { Account } from "../types/models/Account";
 
 
-export async function ensureAccount(accountId: string) {
-    let account = await Account.get(accountId);
-    if (!account) {
+export async function ensureAccount(account: Codec) {
+    const accountId = account.toString();
+    let foundAccount = await Account.get(accountId);
+    if (!foundAccount) {
         // logger.debug('Account not found, creating new account', accountId);
-        account = new Account(accountId);
-        account.balance = BigInt(0);
+        foundAccount = new Account(accountId);
+        foundAccount.balance = BigInt(0);
     }
-    return account
+    return foundAccount
 }

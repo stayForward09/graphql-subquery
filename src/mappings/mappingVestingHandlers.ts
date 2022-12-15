@@ -8,7 +8,7 @@ export async function handleVestingScheduleAddedEvent(event: SubstrateEvent) {
 }
 
 export async function handleCancelAllVestingSchedulesCall(extrinsic: SubstrateExtrinsic) {
-    const who = extrinsic.extrinsic.method.args[0].toString()
-    logger.debug('handleCancelAllVestingSchedulesCall who '  + JSON.stringify(who))
+    const who = extrinsic.extrinsic.method.args[0]
+    logger.debug('handleCancelAllVestingSchedulesCall who '  + who.toString())
     return updateAccountsVestingSchedule([who])
 }

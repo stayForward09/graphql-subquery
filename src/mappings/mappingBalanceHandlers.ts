@@ -3,6 +3,7 @@ import { Balance } from '@polkadot/types/interfaces/runtime';
 import { checkIfExtrinsicExecuteSuccess } from "../helpers";
 import { BalanceTransfer } from "../types/models";
 import { updateAccountBalances } from "../helpers/updateAccountsBalance";
+import { isKicked } from "../helpers/utils";
 
 export async function handleBalanceTransferEvent(event: SubstrateEvent) {
     const from = event.event.data[0];
@@ -34,11 +35,14 @@ export async function handleBalanceTransferEventChainState(event: SubstrateEvent
         logger.error('Some of the from or to address is null', JSON.stringify(event.toHuman()));
         return;
     }
-    return Promise.all([updateAccountBalances([from.toString(), to.toString()])]);
+    return Promise.all([updateAccountBalances([from, to])]);
 }
 
 export async function handleBalanceDepositEvent(event: SubstrateEvent) {
     const who = event.event.data[0];
+    if(isKicked(who)) {
+        return;
+    }
     logger.debug('handleBalanceDepositEvent mapped: '  + who.toString())
-    return updateAccountBalances([who.toString()]);
+    return updateAccountBalances([who]);
 }

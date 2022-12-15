@@ -1,7 +1,8 @@
+import { Codec } from '@polkadot/types/types';
 import { ensureAccount } from "./verifyAccount";
 
-export const updateAccountBalances = async (accounts: string[]) => {
-    const balances = await api.query.system.account.multi(accounts);
+export const updateAccountBalances = async (accounts: Codec[]) => {
+    const balances = await api.query.system.account.multi(accounts.map(account => account.toString()));
     const accountsWithBalances = accounts.map((account, index) => {
         const { data: { free: balance } } = balances[index];
         return { account, balance };
