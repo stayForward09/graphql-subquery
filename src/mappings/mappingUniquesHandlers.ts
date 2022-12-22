@@ -175,6 +175,8 @@ export const handleUniquesCreatedEvent = async (
     "handleUniquesCreatedEvent added: " + JSON.stringify(event.toHuman())
   );
   const collectionId = event.event.data[0];
+  const creator = event.event.data[1];
+  const owner = event.event.data[2];
   const blockNumber = event.block.block.header.number.toNumber();
 
   const collection = await ensureCollection({
@@ -182,5 +184,60 @@ export const handleUniquesCreatedEvent = async (
     blockNumber,
     idx: event.idx
   });
+
+  collection.issuer = creator.toString();
+  collection.owner = owner.toString();
+  collection.admin = creator.toString();
+
+  return collection.save()
+}
+
+export const handleUniquesOwnershipAcceptanceChangedEvent = async (
+  event: SubstrateEvent
+) => {
+  logger.debug(
+    "handleUniquesOwnershipAcceptanceChangedEvent added: " + JSON.stringify(event.toHuman())
+  );
+  const who = event.event.data[0];
+  const collectionId = event.event.data[1];
+  const blockNumber = event.block.block.header.number.toNumber();
+
+  if(!collectionId?.toString()) {
+    return
+  }
+
+  const collection = await ensureCollection({
+    collectionId,
+    blockNumber,
+    idx: event.idx
+  });
+
+  collection.owner = who.toString();
+  
+  return collection.save()
+}
+
+export const handleUniquesTeamChangedEvent = async (
+  event: SubstrateEvent
+) => {
+  logger.debug(
+    "handleUniquesTeamChangedEvent added: " + JSON.stringify(event.toHuman())
+  );
+  const collectionId = event.event.data[0];
+  const issuer = event.event.data[1];
+  const admin = event.event.data[2];
+  const freezer = event.event.data[3];
+  const blockNumber = event.block.block.header.number.toNumber();
+
+  const collection = await ensureCollection({
+    collectionId,
+    blockNumber,
+    idx: event.idx
+  });
+
+  collection.issuer = issuer.toString();
+  collection.admin = admin.toString();
+  collection.freezer = freezer.toString();
+  
   return collection.save()
 }

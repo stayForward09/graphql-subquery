@@ -1,12 +1,10 @@
-type Account @entity {
-  id: ID!
-  balance: BigInt!
-  vestingSchedule: [VestingData]
-}
-
 type Collection @entity {
   id: ID!
   collectionId: String! @index
+  issuer: String! @index
+  admin: String! @index
+  owner: String! @index
+  freezer: String
   metadataCid: String
   isDestroyed: Boolean!
   items: [Item] @derivedFrom(field: "collection")
@@ -31,22 +29,6 @@ type BalanceTransfer @entity {
   timestamp: Float @index
   blockNumber: BigInt
   success: Boolean
-}
-
-type VestingData @jsonField {
-  start: Int
-  period: Int
-  periodCount: Int
-  perPeriod: BigInt
-}
-
-type VestingScheduleAdded @entity {
-  id: ID!
-  block: Int @index
-  txHash: String @index
-  signer: Account!
-  to: Account!
-  data: VestingData
 }
 
 type AllocationEventData @jsonField {
