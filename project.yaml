@@ -43,7 +43,7 @@ dataSources:
           filter:
             module: uniques
             method: Issued
-        - handler: handleUniquesIssuedEvent
+        - handler: handleUniquesCreatedEvent
           kind: substrate/EventHandler
           filter:
             module: uniques
@@ -58,7 +58,17 @@ dataSources:
           filter:
             module: uniques
             method: CollectionMetadataSet
-        - handler: handleBalanceTransferEvent
+        - handler: handleUniquesOwnershipAcceptanceChangedEvent
+          kind: substrate/EventHandler
+          filter:
+            module: uniques
+            method: OwnershipAcceptanceChanged
+        - handler: handleUniquesTeamChangedEvent
+          kind: substrate/EventHandler
+          filter:
+            module: uniques
+            method: TeamChanged
+        - handler: handleBalancesTransferEvent
           kind: substrate/EventHandler
           filter:
             module: balances
