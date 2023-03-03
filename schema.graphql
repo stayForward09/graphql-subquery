@@ -7,6 +7,8 @@ type Collection @entity {
   freezer: String
   metadataCid: String
   isDestroyed: Boolean!
+  createdAt: Float @index
+  updatedAt: Float @index
   items: [Item] @derivedFrom(field: "collection")
 }
 
@@ -17,13 +19,15 @@ type Item @entity {
   collection: Collection!
   metadataCid: String
   isBurned: Boolean!
+  createdAt: Float @index
+  updatedAt: Float @index
   owner: String
 }
 
 type BalanceTransfer @entity {
   id: ID!
-  from: String!
-  to: String!
+  from: String! @index
+  to: String! @index
   txHash: String @index
   amount: BigInt @index
   timestamp: Float @index
@@ -32,13 +36,13 @@ type BalanceTransfer @entity {
 }
 
 type AllocationEventData @jsonField {
-  who: String
+  who: String @index
   amount: String
 }
 
 type AllocationEvent @jsonField {
-  method: String
-  section: String
+  method: String @index
+  section: String @index
   index: String
   data: AllocationEventData
 }
