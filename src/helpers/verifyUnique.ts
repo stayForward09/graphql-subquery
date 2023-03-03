@@ -5,14 +5,16 @@ type EnsureCollection = {
     idx: number;
     blockNumber: number;
     collectionId: Codec;
+    timestamp: Date;
 }
 
 type EnsureItem = EnsureCollection & {
     itemId: Codec;
+    collectionFkey: string;
 }
 
 export const ensureCollection = async ({
-    collectionId, blockNumber, idx
+    collectionId, blockNumber, idx, timestamp
 }: EnsureCollection) => {
     const collectionIdString = collectionId.toString();
     const collections = await Collection.getByCollectionId(collectionIdString);
@@ -23,15 +25,24 @@ export const ensureCollection = async ({
         collection = new Collection(id);
         collection.collectionId = collectionIdString;
         collection.isDestroyed = false;
+        collection.issuer = '';
+        collection.owner = '';
+        collection.admin = '';
+        collection.createdAt = new Date(
+            timestamp
+        ).getTime();
     }
+    collection.createdAt = new Date(
+        timestamp
+    ).getTime();
     return collection;
 }
 
 export const ensureItem = async ({
-    collectionId, itemId, blockNumber, idx
+    collectionId, itemId, blockNumber, idx, collectionFkey, timestamp
 }: EnsureItem) => {
     const itemIdString = itemId.toString();
-    let items = await Item.getByCollectionItemKey(`${collectionId}-${itemIdString}`);
+    const items = await Item.getByCollectionItemKey(`${collectionId}-${itemIdString}`);
     let item = items.find((c) => !c.isBurned);
     if (!item) {
         const id = `${collectionId}-${itemIdString}-${blockNumber}-${idx}`;
@@ -39,7 +50,14 @@ export const ensureItem = async ({
         item = new Item(id);
         item.collectionItemKey = `${collectionId}-${itemIdString}`;
         item.itemId = itemIdString;
+        item.collectionId = collectionFkey;
         item.isBurned = false;
+        item.createdAt = new Date(
+            timestamp
+        ).getTime();
     }
+    item.updatedAt = new Date(
+        timestamp
+    ).getTime();
     return item;
 }
