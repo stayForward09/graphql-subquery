@@ -1,4 +1,3 @@
-import { Collection } from './../types/models/Collection';
 import { Item } from './../types/models/Item';
 import { Balance } from '@polkadot/types/interfaces/runtime';
 import { ensureCollection, ensureItem } from './../helpers/verifyUnique';
@@ -46,12 +45,16 @@ export async function handleUniquesTransferEvent(
     collectionId,
     blockNumber,
     idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp,
   });
+
   const item = await ensureItem({
     collectionId,
+    collectionFkey: collection.id,
     itemId,
     blockNumber,
     idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp,
   });
   item.owner = to.toString();
   uniqueTransfer.itemId = item.id;
@@ -71,11 +74,23 @@ export const handleUniquesMetadataSetEvent = async (
   const data = event.event.data[2];
   const blockNumber = event.block.block.header.number.toNumber();
 
+  //small check
+  let items = await Item.getByCollectionItemKey(`${collectionId.toString()}-${itemId.toString()}`);
+
+  if (items.length <= 0) {
+    logger.error(
+      "Item not found while handling uniqueMetadataSetEvent",
+      JSON.stringify(event.toHuman())
+    );
+    return;
+  }
   const item = await ensureItem({
     collectionId,
+    collectionFkey: items[0].collectionId,
     itemId,
     blockNumber,
     idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp,
   });
   item.metadataCid = data.toHuman().toString();
   return item.save();
@@ -94,7 +109,8 @@ export const handleUniquesCollectionMetadataSetEvent = async (
   const collection = await ensureCollection({
     collectionId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
   collection.metadataCid = data.toHuman().toString();
 
@@ -113,7 +129,8 @@ export const handleUniquesDestroyedEvent = async (
   const collection = await ensureCollection({
     collectionId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
   collection.isDestroyed = true;
   return collection.save()
@@ -129,12 +146,22 @@ export const handleUniquesBurnedEvent = async (
   const collectionId = event.event.data[0];
   const blockNumber = event.block.block.header.number.toNumber();
 
+  const collection = await ensureCollection({
+    collectionId,
+    blockNumber,
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp,
+  });
+
   const item = await ensureItem({
     collectionId,
+    collectionFkey: collection.id,
     itemId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
+
   item.isBurned = true;
   return item.save();
 }
@@ -153,17 +180,21 @@ export const handleUniquesIssuedEvent = async (
   const collection = await ensureCollection({
     collectionId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
   const item = await ensureItem({
     collectionId,
+    collectionFkey: collection.id,
     itemId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
 
   item.owner = owner.toString();
   item.collectionId = collection.id;
+  
   await collection.save()
   return item.save();
 }
@@ -182,7 +213,8 @@ export const handleUniquesCreatedEvent = async (
   const collection = await ensureCollection({
     collectionId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
 
   collection.issuer = creator.toString();
@@ -209,7 +241,8 @@ export const handleUniquesOwnershipAcceptanceChangedEvent = async (
   const collection = await ensureCollection({
     collectionId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
 
   collection.owner = who.toString();
@@ -232,7 +265,8 @@ export const handleUniquesTeamChangedEvent = async (
   const collection = await ensureCollection({
     collectionId,
     blockNumber,
-    idx: event.idx
+    idx: event.idx,
+    timestamp: event.extrinsic.block.timestamp
   });
 
   collection.issuer = issuer.toString();
