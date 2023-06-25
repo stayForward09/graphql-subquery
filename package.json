@@ -23,7 +23,7 @@
     "@polkadot/api-augment": "^9.8.2",
     "@polkadot/api-base": "^9.8.2",
     "@polkadot/types-augment": "^9.8.2",
-    "@subql/cli": "^3.2.1",
+    "@subql/cli": "^3.2.0",
     "@subql/types": "^2.1.2",
     "typescript": "^4.1.3"
   },
