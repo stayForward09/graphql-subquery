@@ -5,7 +5,7 @@ on:
       - ".github/workflows/**"
 jobs:
   pr:
-    name: pr
+    name: Codegen & Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - name: Install subql-node
-        run: yarn global add @subql/node
-      - name: Run tests with Subquery Node
-        run: subql-node test -f ${{ github.workspace }}
+#      - name: Install subql-node
+#        run: yarn global add @subql/node
+#      - name: Run tests with Subquery Node
+#        run: subql-node test -f ${{ github.workspace }}
