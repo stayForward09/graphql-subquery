@@ -20,9 +20,7 @@ export const ensureCollection = async ({
     if (!collection) {
         const id = `${collectionIdString}-${blockNumber}-${idx}`;
         logger.warn('Collection not found, creating new collection', collectionIdString);
-        collection = new Collection(id);
-        collection.collectionId = collectionIdString;
-        collection.isDestroyed = false;
+        collection = new Collection(id, collectionIdString, '', '', '', false);
     }
     return collection;
 }
@@ -36,10 +34,7 @@ export const ensureItem = async ({
     if (!item) {
         const id = `${collectionId}-${itemIdString}-${blockNumber}-${idx}`;
         logger.warn('Item not found, creating new item', itemIdString);
-        item = new Item(id);
-        item.collectionItemKey = `${collectionId}-${itemIdString}`;
-        item.itemId = itemIdString;
-        item.isBurned = false;
+        item = new Item(id, itemIdString, `${collectionId}-${itemIdString}`, '', false);
     }
     return item;
 }

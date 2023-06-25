@@ -24,7 +24,7 @@ export async function handleUniquesTransferEvent(
     return;
   }
 
-  const uniqueTransfer = new UniquesTransfer(id);
+  const uniqueTransfer = new UniquesTransfer(id, '', '');
 
   uniqueTransfer.block = blockNumber;
   uniqueTransfer.from = from.toString();
