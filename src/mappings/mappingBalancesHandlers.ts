@@ -12,7 +12,7 @@ export async function handleBalancesTransferEvent(event: SubstrateEvent) {
     }
     
     const amount = event.event.data[2];
-    let record = new BalanceTransfer(`${event.block.block.header.number.toNumber()}-${event.idx}`);
+    let record = new BalanceTransfer(`${event.block.block.header.number.toNumber()}-${event.idx}`, '', '');
     record.blockNumber = event.block.block.header.number.toBigInt();
     record.from = from.toString();
     record.to = to.toString();

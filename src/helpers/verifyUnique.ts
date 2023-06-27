@@ -22,12 +22,7 @@ export const ensureCollection = async ({
     if (!collection) {
         const id = `${collectionIdString}-${blockNumber}-${idx}`;
         logger.warn('Collection not found, creating new collection', collectionIdString);
-        collection = new Collection(id);
-        collection.collectionId = collectionIdString;
-        collection.isDestroyed = false;
-        collection.issuer = '';
-        collection.owner = '';
-        collection.admin = '';
+        collection = new Collection(id, collectionIdString, '', '', '', false);
         collection.createdAt = new Date(
             timestamp
         ).getTime();
@@ -47,11 +42,7 @@ export const ensureItem = async ({
     if (!item) {
         const id = `${collectionId}-${itemIdString}-${blockNumber}-${idx}`;
         logger.warn('Item not found, creating new item', itemIdString);
-        item = new Item(id);
-        item.collectionItemKey = `${collectionId}-${itemIdString}`;
-        item.itemId = itemIdString;
-        item.collectionId = collectionFkey;
-        item.isBurned = false;
+        item = new Item(id, itemIdString, `${collectionId}-${itemIdString}`, collectionFkey, false);
         item.createdAt = new Date(
             timestamp
         ).getTime();
